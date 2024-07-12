@@ -118,7 +118,7 @@ fun TaskEditor(
                     Text("${taskModel.reminders.size}", color = pallet().primary)
                 },
                 onClick = {
-                    onAction(TaskEditorUIActions.EditTimeAndReminder)
+                    onAction(TaskEditorUIActions.EditReminder)
                 }
             )
             TaskEditorOption(

@@ -45,19 +45,8 @@ class TaskEditorViewModel @Inject constructor(
             is TaskEditorUIActions.EditNote -> showDialog(DialogType.NOTE, null)
             is TaskEditorUIActions.SelectPriority -> showDialog(DialogType.PRIORITY, null)
             is TaskEditorUIActions.SelectDate -> showDialog(DialogType.DATE, null)
-            is TaskEditorUIActions.EditTimeAndReminder -> showDialog(DialogType.TIME_REMINDER, null)
             is TaskEditorUIActions.EditReminder -> {
-                showDialog(
-                    DialogType.TIME_REMINDER,
-                    TaskReminderAction(action.reminder, TimeReminderActionType.DEFAULT)
-                )
-            }
-
-            is TaskEditorUIActions.SetReminderTime -> {
-                showDialog(
-                    DialogType.TIME_REMINDER,
-                    TaskReminderAction(action.reminder, TimeReminderActionType.SET_TIME)
-                )
+                showDialog(DialogType.TIME_REMINDER, null)
             }
 
             is TaskEditorUIActions.SaveTask -> saveTask(action.data)
@@ -86,13 +75,11 @@ sealed interface TaskEditorUIActions {
     data object SelectPriority : TaskEditorUIActions
     data object EditNote : TaskEditorUIActions
     data object EditCheckList : TaskEditorUIActions
-    data object EditTimeAndReminder : TaskEditorUIActions
     data object SelectDate : TaskEditorUIActions
     data object CloseDialog : TaskEditorUIActions
     data class UpdateTask(val data: TaskModel) : TaskEditorUIActions
     data class SaveTask(val data: TaskModel) : TaskEditorUIActions
-    data class EditReminder(val reminder: TaskReminder?) : TaskEditorUIActions
-    data class SetReminderTime(val reminder: TaskReminder) : TaskEditorUIActions
+    data object EditReminder : TaskEditorUIActions
 }
 
 enum class DialogType {
@@ -103,7 +90,3 @@ enum class TimeReminderActionType {
     DEFAULT, SET_TIME
 }
 
-data class TaskReminderAction(
-    val data: TaskReminder?,
-    val action: TimeReminderActionType = TimeReminderActionType.DEFAULT
-)

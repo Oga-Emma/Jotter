@@ -46,20 +46,17 @@ import app.seven.jotter.core.models.TaskModel
 import app.seven.jotter.core.models.TaskModelCreator
 import app.seven.jotter.core.models.TaskReminder
 import app.seven.jotter.core.models.TaskReminderType
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import java.util.UUID
 
 @Composable
 fun TimeAndReminderDialog(
-    task: TaskModel,
+    taskReminder: List<TaskReminder>,
     onCancel: () -> Unit,
     editReminder: (TaskReminder) -> Unit,
-    onUpdateTimeAndReminders: (List<TaskReminder>) -> Unit,
+    onSave: (List<TaskReminder>) -> Unit,
 ) {
-    val reminders = rememberSaveable { mutableStateOf(task.reminders) }
+    val reminders = rememberSaveable { mutableStateOf(taskReminder) }
 
     fun deleteReminder(reminder: TaskReminder) {
         reminders.value = reminders.value.toMutableList().apply {
@@ -71,7 +68,7 @@ fun TimeAndReminderDialog(
         title = "TIME AND REMINDER",
         onCancel = onCancel,
         onConfirm = {
-            onUpdateTimeAndReminders(reminders.value)
+            onSave(reminders.value)
         }) {
         Column {
 
@@ -289,16 +286,13 @@ fun ReminderItem(
 @Composable
 fun TimeAndReminderDialogPreview() {
     TimeAndReminderDialog(
-        task = TaskModelCreator.newTaskWithDefaultValues()
-            .copy(
-                reminders = listOf(
-                    TaskReminder(
-                        id = UUID.randomUUID(),
-                        type = TaskReminderType.NOTIFICATION,
-                        time = LocalTime.of(12, 0)
-                    )
-                )
-            ),
+        taskReminder = listOf(
+            TaskReminder(
+                id = UUID.randomUUID(),
+                type = TaskReminderType.NOTIFICATION,
+                time = LocalTime.of(12, 0)
+            )
+        ),
         onCancel = { /*TODO*/ }, editReminder = {}) {
     }
 }

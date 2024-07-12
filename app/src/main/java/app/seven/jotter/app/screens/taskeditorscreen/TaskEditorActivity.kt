@@ -1,7 +1,6 @@
 package app.seven.jotter.app.screens.taskeditorscreen
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -18,16 +17,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.seven.jotter.app.components.CustomDatePikerDialog
-import app.seven.jotter.app.components.CustomTimePikerDialog
 import app.seven.jotter.app.components.ObserveFlowStateAsEvents
 import app.seven.jotter.app.components.keyboardAsState
-import app.seven.jotter.app.screens.taskeditorscreen.dialogs.EditReminderDialog
+import app.seven.jotter.app.screens.taskeditorscreen.component.EditTaskReminder
 import app.seven.jotter.app.screens.taskeditorscreen.dialogs.SelectCategoryDialog
-import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TimeAndReminderDialog
 import app.seven.jotter.app.theme.JotterTheme
 import app.seven.jotter.core.models.TaskCategory
 import app.seven.jotter.core.models.TaskModel
-import app.seven.jotter.core.models.TaskReminder
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -100,69 +96,14 @@ class TaskEditorActivity : ComponentActivity() {
                             }
 
                             DialogType.TIME_REMINDER -> {
-                                val taskReminderAction = showDialogEvent.value!!.data
-
-                                if (taskReminderAction != null && taskReminderAction is TaskReminderAction && taskReminderAction.data != null) {
-                                    if (taskReminderAction.action == TimeReminderActionType.SET_TIME) {
-                                        CustomTimePikerDialog(
-                                            onTimeSelected = {
-                                                with(taskEditorViewModel) {
-                                                    onAction(TaskEditorUIActions.CloseDialog)
-                                                    onAction(TaskEditorUIActions.EditReminder(taskReminderAction.data.copy(time = it)))
-                                                }
-                                            },
-                                            onDismiss = {
-                                                with(taskEditorViewModel) {
-                                                    onAction(TaskEditorUIActions.CloseDialog)
-                                                    onAction(TaskEditorUIActions.EditReminder(taskReminderAction.data))
-                                                }
-                                            }
-                                        )
-                                    } else {
-                                        EditReminderDialog(
-                                            taskReminder = taskReminderAction.data,
-                                            onCancel = {
-                                                with(taskEditorViewModel) {
-                                                    onAction(TaskEditorUIActions.CloseDialog)
-                                                    onAction(TaskEditorUIActions.EditReminder(null))
-                                                }
-                                            },
-                                            onEditTime = {
-                                                with(taskEditorViewModel) {
-                                                    onAction(TaskEditorUIActions.CloseDialog)
-                                                    onAction(TaskEditorUIActions.SetReminderTime(it))
-                                                }
-                                            },
-                                            onUpdate = {
-                                                val updatedTask = task.copy(
-                                                    reminders = task.reminders
-                                                        .toMutableSet().apply { add(it) }
-                                                        .toList()
-                                                )
-                                                updateTask(updatedTask)
-                                                with(taskEditorViewModel) {
-                                                    onAction(TaskEditorUIActions.CloseDialog)
-                                                    onAction(TaskEditorUIActions.EditReminder(null))
-                                                }
-                                            }
-                                        )
-                                    }
-
-                                } else {
-                                    TimeAndReminderDialog(
-                                        task = task,
-                                        editReminder = {
-                                            with(taskEditorViewModel) {
-                                                onAction(TaskEditorUIActions.CloseDialog)
-                                                onAction(TaskEditorUIActions.EditReminder(it))
-                                            }
-                                        },
-                                        onUpdateTimeAndReminders = {
-                                            updateTask(task.copy(reminders = it))
-                                        },
-                                        onCancel = ::closeDialog
-                                    )
-                                }
+                                EditTaskReminder(
+                                    taskReminders = taskEditorViewModel.task.value.reminders,
+                                    onSave = {
+                                        updateTask(task.copy(reminders = it))
+                                    },
+                                    onDismiss = {
+                                        taskEditorViewModel.onAction(TaskEditorUIActions.CloseDialog)
+                                    })
                             }
 
                             DialogType.PRIORITY -> TODO()
