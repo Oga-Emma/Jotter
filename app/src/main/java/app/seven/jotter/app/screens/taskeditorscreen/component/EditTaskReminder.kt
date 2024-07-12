@@ -15,13 +15,26 @@ fun EditTaskReminder(
     onSave: (List<TaskReminder>) -> Unit,
     onDismiss: () -> Unit
 ) {
-
     val reminders = rememberSaveable { mutableStateOf(taskReminders) }
     val selectedTaskReminderAction = remember { mutableStateOf<EditTaskReminderAction?>(null) }
 
+    fun showMainDialog(updatedReminders: List<TaskReminder>) {
+        reminders.value = updatedReminders
+        selectedTaskReminderAction.value = null
+    }
 
-    fun showDialog(which: EditTaskDialogType){
+    fun showEditReminderDialog(taskReminder: TaskReminder){
+        selectedTaskReminderAction.value = EditTaskReminderAction(
+            reminder = taskReminder,
+            action = EditTaskReminderActionType.DEFAULT
+        )
+    }
 
+    fun showEditReminderTimeDialog(taskReminder: TaskReminder){
+        selectedTaskReminderAction.value = EditTaskReminderAction(
+            reminder = taskReminder,
+            action = EditTaskReminderActionType.EDIT_REMINDER_TIME
+        )
     }
 
     if (selectedTaskReminderAction.value != null) {
@@ -30,31 +43,19 @@ fun EditTaskReminder(
         if (selectedReminder.action == EditTaskReminderActionType.EDIT_REMINDER_TIME) {
             CustomTimePikerDialog(
                 onTimeSelected = {
-                    selectedTaskReminderAction.value = selectedReminder.copy(
-                        reminder = selectedReminder.reminder.copy(time = it),
-                        action = EditTaskReminderActionType.DEFAULT
-                    )
+                   showEditReminderDialog(selectedReminder.reminder.copy(time = it))
                 },
                 onDismiss = {
-                    selectedTaskReminderAction.value = selectedReminder.copy(
-                        action = EditTaskReminderActionType.DEFAULT
-                    )
+                    showEditReminderDialog(selectedReminder.reminder)
                 }
             )
         } else {
             EditReminderDialog(
                 taskReminder = selectedReminder.reminder,
-                onCancel = {
-                    selectedTaskReminderAction.value = null
-                },
-                onEditTime = {
-                    selectedTaskReminderAction.value = EditTaskReminderAction(
-                        reminder = it,
-                        action = EditTaskReminderActionType.EDIT_REMINDER_TIME
-                    )
-                },
+                onCancel = { showMainDialog( reminders.value ) },
+                onEditTime = { showEditReminderTimeDialog(it) },
                 onUpdate = { reminder ->
-                    reminders.value = reminders.value.toMutableList().apply {
+                    val updatedReminders = reminders.value.toMutableList().apply {
                         val currentIndex = this.indexOfFirst { it.id == reminder.id }
 
                         if (currentIndex == -1) {
@@ -64,19 +65,14 @@ fun EditTaskReminder(
                         }
                     }
 
-                    selectedTaskReminderAction.value = null
+                    showMainDialog(updatedReminders)
                 }
             )
         }
     } else {
         TimeAndReminderDialog(
             taskReminder = reminders.value,
-            editReminder = {
-                selectedTaskReminderAction.value = EditTaskReminderAction(
-                    reminder = it,
-                    action = EditTaskReminderActionType.DEFAULT
-                )
-            },
+            editReminder = { showEditReminderDialog(it) },
             onSave = { onSave(it) },
             onCancel = { onDismiss() }
         )
@@ -84,7 +80,7 @@ fun EditTaskReminder(
 }
 
 enum class EditTaskDialogType {
-    MAIN_DIALOG, EDI
+    MAIN_DIALOG, EDIT_REMINDER, EDIT_REMINDER_TIME
 }
 
 enum class EditTaskReminderActionType {
