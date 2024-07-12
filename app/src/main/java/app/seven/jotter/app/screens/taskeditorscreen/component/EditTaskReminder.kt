@@ -71,8 +71,13 @@ fun EditTaskReminder(
         }
     } else {
         TimeAndReminderDialog(
-            taskReminder = reminders.value,
-            editReminder = { showEditReminderDialog(it) },
+            reminders = reminders.value,
+            onEditReminder = { showEditReminderDialog(it) },
+            onDeleteReminder = {
+                reminders.value = reminders.value.toMutableList().apply {
+                    remove(it)
+                }
+            },
             onSave = { onSave(it) },
             onCancel = { onDismiss() }
         )

@@ -15,9 +15,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AlarmOff
 import androidx.compose.material.icons.filled.DeleteOutline
-import androidx.compose.material.icons.filled.NotificationsNone
 import androidx.compose.material.icons.outlined.Alarm
+import androidx.compose.material.icons.outlined.AlarmOn
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.NotificationsActive
 import androidx.compose.material.icons.outlined.NotificationsOff
 import androidx.compose.material.icons.rounded.AddCircleOutline
 import androidx.compose.material3.Icon
@@ -27,7 +28,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,15 +35,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import app.seven.jotter.app.components.ActionEditorDialog
 import app.seven.jotter.app.components.CircularIcon
 import app.seven.jotter.app.components.CustomDivider
 import app.seven.jotter.app.components.EmptyState
-import app.seven.jotter.app.components.ActionEditorDialog
 import app.seven.jotter.app.theme.spacing
 import app.seven.jotter.app.theme.textSize
 import app.seven.jotter.core.extensions.formatTime
-import app.seven.jotter.core.models.TaskModel
-import app.seven.jotter.core.models.TaskModelCreator
 import app.seven.jotter.core.models.TaskReminder
 import app.seven.jotter.core.models.TaskReminderType
 import java.time.LocalTime
@@ -51,28 +49,21 @@ import java.util.UUID
 
 @Composable
 fun TimeAndReminderDialog(
-    taskReminder: List<TaskReminder>,
+    reminders: List<TaskReminder>,
     onCancel: () -> Unit,
-    editReminder: (TaskReminder) -> Unit,
+    onEditReminder: (TaskReminder) -> Unit,
+    onDeleteReminder: (TaskReminder) -> Unit,
     onSave: (List<TaskReminder>) -> Unit,
 ) {
-    val reminders = rememberSaveable { mutableStateOf(taskReminder) }
-
-    fun deleteReminder(reminder: TaskReminder) {
-        reminders.value = reminders.value.toMutableList().apply {
-            remove(reminder)
-        }
-    }
-
     ActionEditorDialog(
         title = "TIME AND REMINDER",
         onCancel = onCancel,
         onConfirm = {
-            onSave(reminders.value)
+            onSave(reminders)
         }) {
         Column {
 
-            if (reminders.value.isEmpty()) {
+            if (reminders.isEmpty()) {
                 EmptyState(
                     modifier = Modifier.padding(spacing().medium),
                     icon = Icons.Default.AlarmOff,
@@ -80,14 +71,14 @@ fun TimeAndReminderDialog(
                 )
             } else {
                 LazyColumn {
-                    items(reminders.value.size) { index ->
-                        val reminder = reminders.value[index]
+                    items(reminders.size) { index ->
+                        val reminder = reminders[index]
                         ReminderItem(
                             taskReminder = reminder,
                             onEdit = {
-                                editReminder(it)
+                                onEditReminder(it)
                             },
-                            onDelete = ::deleteReminder,
+                            onDelete = { onDeleteReminder(it) },
                         )
                     }
                 }
@@ -101,7 +92,7 @@ fun TimeAndReminderDialog(
                         type = TaskReminderType.NOTIFICATION,
                         time = LocalTime.of(12, 0)
                     ).also {
-                        editReminder(it)
+                        onEditReminder(it)
                     }
                 }) {
                 Icon(Icons.Rounded.AddCircleOutline, "")
@@ -250,7 +241,11 @@ fun ReminderItem(
                 modifier = Modifier.clickable {
                     onEdit(taskReminder)
                 },
-                imageVector = Icons.Default.NotificationsNone,
+                imageVector = when(taskReminder.type){
+                    TaskReminderType.NONE ->   Icons.Outlined.NotificationsOff
+                    TaskReminderType.ALARM ->   Icons.Outlined.AlarmOn
+                    TaskReminderType.NOTIFICATION ->   Icons.Outlined.NotificationsActive
+                },
                 contentDescription = "Notification Icon"
             )
             Spacer(modifier = Modifier.width(spacing().small))
@@ -266,7 +261,7 @@ fun ReminderItem(
                     text = taskReminder.time.formatTime(),
                     fontSize = textSize().medium
                 )
-                Text(text = "Reminder time")
+                Text(text = "Reminder time", fontSize = textSize().xMedium)
             }
             Spacer(modifier = Modifier.width(spacing().small))
             CircularIcon(
@@ -286,14 +281,14 @@ fun ReminderItem(
 @Composable
 fun TimeAndReminderDialogPreview() {
     TimeAndReminderDialog(
-        taskReminder = listOf(
+        reminders = listOf(
             TaskReminder(
                 id = UUID.randomUUID(),
                 type = TaskReminderType.NOTIFICATION,
                 time = LocalTime.of(12, 0)
             )
         ),
-        onCancel = { /*TODO*/ }, editReminder = {}) {
+        onCancel = { /*TODO*/ }, onEditReminder = {}, onDeleteReminder = {}) {
     }
 }
 
