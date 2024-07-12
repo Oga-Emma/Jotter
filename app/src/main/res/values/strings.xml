@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">Jotter</string>
+    <string name="title_activity_task_editor">TaskEditorActivity</string>
+</resources>
