@@ -121,16 +121,16 @@ fun TaskEditor(
                     onAction(TaskEditorUIActions.EditReminder)
                 }
             )
-            TaskEditorOption(
-                title = "Priority",
-                icon = Icons.Rounded.LowPriority,
-                leading = {
-                    Text(taskModel.priority.name.titleCase(), color = pallet().primary)
-                },
-                onClick = {
-                    onAction(TaskEditorUIActions.SelectPriority)
-                }
-            )
+//            TaskEditorOption(
+//                title = "Priority",
+//                icon = Icons.Rounded.LowPriority,
+//                leading = {
+//                    Text(taskModel.priority.name.titleCase(), color = pallet().primary)
+//                },
+//                onClick = {
+//                    onAction(TaskEditorUIActions.SelectPriority)
+//                }
+//            )
             TaskEditorOption(
                 title = "Note",
                 icon = Icons.AutoMirrored.Rounded.Notes,

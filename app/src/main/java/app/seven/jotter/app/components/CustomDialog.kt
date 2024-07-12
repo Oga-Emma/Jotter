@@ -23,6 +23,7 @@ import app.seven.jotter.app.theme.spacing
 
 @Composable
 fun CustomDialog(
+    modifier: Modifier = Modifier,
     onCancel: () -> Unit,
     content: @Composable () -> Unit
 ) {
@@ -31,11 +32,12 @@ fun CustomDialog(
             properties = DialogProperties(
                 usePlatformDefaultWidth = false,
                 dismissOnBackPress = true,
-                dismissOnClickOutside = true
+                dismissOnClickOutside = true,
+                decorFitsSystemWindows = false
             )
         ) {
             Box(
-                modifier = Modifier.fillMaxSize(),
+                modifier = modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
             ) {
                 Box(

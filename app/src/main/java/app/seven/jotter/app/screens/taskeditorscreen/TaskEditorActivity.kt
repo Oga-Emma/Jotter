@@ -20,6 +20,7 @@ import app.seven.jotter.app.components.CustomDatePikerDialog
 import app.seven.jotter.app.components.ObserveFlowStateAsEvents
 import app.seven.jotter.app.components.keyboardAsState
 import app.seven.jotter.app.screens.taskeditorscreen.component.EditTaskReminder
+import app.seven.jotter.app.screens.taskeditorscreen.dialogs.NoteDialog
 import app.seven.jotter.app.screens.taskeditorscreen.dialogs.SelectCategoryDialog
 import app.seven.jotter.app.theme.JotterTheme
 import app.seven.jotter.core.models.TaskCategory
@@ -106,9 +107,20 @@ class TaskEditorActivity : ComponentActivity() {
                                     })
                             }
 
-                            DialogType.PRIORITY -> TODO()
-                            DialogType.NOTE -> TODO()
+                            DialogType.NOTE -> {
+                                NoteDialog(
+                                    taskNote = task.note,
+                                    onSave = {
+                                        updateTask(task.copy(note = it))
+                                    },
+                                    onCancel = {
+                                        taskEditorViewModel.onAction(TaskEditorUIActions.CloseDialog)
+                                    }
+                                )
+                            }
+
                             DialogType.CHECKLIST -> TODO()
+                            DialogType.PRIORITY -> TODO()
                             DialogType.NONE -> Unit
                         }
                     }

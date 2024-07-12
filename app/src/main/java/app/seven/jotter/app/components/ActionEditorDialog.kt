@@ -19,6 +19,7 @@ import app.seven.jotter.app.theme.textSize
 
 @Composable
 fun ActionEditorDialog(
+    modifier: Modifier = Modifier,
     title: String,
     confirmLabel: String = "SAVE",
     cancelLabel: String = "CANCEL",
@@ -28,9 +29,10 @@ fun ActionEditorDialog(
 ) {
 
     CustomDialog(
+        modifier = modifier,
         onCancel = onCancel,
     ) {
-        Column {
+        Column{
             Text(
                 text = title,
                 fontWeight = FontWeight.Medium,

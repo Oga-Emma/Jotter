@@ -8,6 +8,7 @@ import java.util.UUID
 data class TaskModel(
     val id: UUID,
     val description: String,
+    val note: String,
     val category: TaskCategory,
     val date: LocalDate,
     val reminders: List<TaskReminder>,
@@ -20,6 +21,7 @@ object TaskModelCreator {
     fun newTaskWithDefaultValues() = TaskModel(
         id = UUID.randomUUID(),
         description = "",
+        note = "",
         category = TaskCategory.TASK,
         date = LocalDate.now(),
         reminders = mutableListOf(),
