@@ -1,7 +1,6 @@
 package app.seven.jotter.core.models
 
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.UUID
 
@@ -12,9 +11,15 @@ data class TaskModel(
     val category: TaskCategory,
     val date: LocalDate,
     val reminders: List<TaskReminder>,
-    val list: List<String>,
+    val checkList: List<TaskCheckListItem>,
     val priority: TaskPriority,
     val frequency: TaskFrequency
+)
+
+data class TaskCheckListItem(
+    val id: UUID,
+    val description: String,
+    val isDone: Boolean
 )
 
 object TaskModelCreator {
@@ -25,7 +30,7 @@ object TaskModelCreator {
         category = TaskCategory.TASK,
         date = LocalDate.now(),
         reminders = mutableListOf(),
-        list = mutableListOf(),
+        checkList = mutableListOf(),
         priority = TaskPriority.MEDIUM,
         frequency = TaskFrequency.ONCE
     )

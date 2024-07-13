@@ -18,12 +18,13 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.StickyNote2
 import androidx.compose.material.icons.automirrored.rounded.Notes
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material.icons.rounded.Checklist
 import androidx.compose.material.icons.rounded.DateRange
-import androidx.compose.material.icons.rounded.LowPriority
 import androidx.compose.material.icons.rounded.NotificationAdd
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -32,9 +33,9 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -43,7 +44,10 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import app.seven.jotter.app.components.CircularAvatar
+import app.seven.jotter.app.components.CircularIcon
 import app.seven.jotter.app.components.ConfirmCancelButton
+import app.seven.jotter.app.components.CustomDivider
 import app.seven.jotter.app.screens.taskeditorscreen.component.IconHelper
 import app.seven.jotter.app.theme.pallet
 import app.seven.jotter.app.theme.spacing
@@ -61,6 +65,8 @@ fun TaskEditor(
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
+    var isValid by remember { mutableStateOf(true) }
     var description by remember { mutableStateOf(taskModel.description) }
 
     Column(
@@ -76,10 +82,18 @@ fun TaskEditor(
             onValueChange = { description = it },
             label = { Text("Task") },
             singleLine = true,
+            isError = !isValid,
             keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
             keyboardActions = KeyboardActions(
-                onDone = {keyboardController?.hide()})
+                onDone = { keyboardController?.hide() })
         )
+
+        if (!isValid) {
+            Text(
+                modifier = Modifier
+                    .padding(horizontal = spacing().medium),
+                text = "Please enter a task", color = Color.Red)
+        }
 
         Column(
             modifier = Modifier
@@ -115,7 +129,9 @@ fun TaskEditor(
                 title = "Time and Reminders",
                 icon = Icons.Rounded.NotificationAdd,
                 leading = {
-                    Text("${taskModel.reminders.size}", color = pallet().primary)
+                    CircularAvatar{
+                        Text("${taskModel.reminders.size}", color = pallet().primary)
+                    }
                 },
                 onClick = {
                     onAction(TaskEditorUIActions.EditReminder)
@@ -135,6 +151,12 @@ fun TaskEditor(
                 title = "Note",
                 icon = Icons.AutoMirrored.Rounded.Notes,
                 leading = {
+                    CircularIcon(
+                        imageVector = if (taskModel.note.isBlank())
+                            Icons.AutoMirrored.Outlined.StickyNote2
+                        else Icons.Outlined.EditNote,
+                        contentDescription = "Note"
+                    )
                 },
                 onClick = {
                     onAction(TaskEditorUIActions.EditNote)
@@ -144,7 +166,9 @@ fun TaskEditor(
                 title = "Checklist",
                 icon = Icons.Rounded.Checklist,
                 leading = {
-                    Text("0", color = pallet().primary)
+                    CircularAvatar {
+                        Text(taskModel.checkList.count().toString(), color = pallet().primary)
+                    }
                 },
                 onClick = {
                     onAction(TaskEditorUIActions.EditCheckList)
@@ -152,11 +176,20 @@ fun TaskEditor(
             )
 
         }
+        CustomDivider()
         Spacer(
             modifier = Modifier
                 .padding(vertical = spacing().small)
         )
         ConfirmCancelButton(onConfirm = {
+
+            if(description.isBlank()){
+                isValid = false
+                return@ConfirmCancelButton
+            } else {
+                isValid = true
+            }
+
             onAction(
                 TaskEditorUIActions.SaveTask(
                     taskModel.copy(description = description)

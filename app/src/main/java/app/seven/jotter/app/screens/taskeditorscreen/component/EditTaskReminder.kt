@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import app.seven.jotter.app.components.CustomTimePikerDialog
 import app.seven.jotter.app.screens.taskeditorscreen.dialogs.EditReminderDialog
-import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TimeAndReminderDialog
+import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TaskTimeAndReminderDialog
 import app.seven.jotter.core.models.TaskReminder
 
 @Composable
@@ -70,7 +70,7 @@ fun EditTaskReminder(
             )
         }
     } else {
-        TimeAndReminderDialog(
+        TaskTimeAndReminderDialog(
             reminders = reminders.value,
             onEditReminder = { showEditReminderDialog(it) },
             onDeleteReminder = {

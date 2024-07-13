@@ -15,7 +15,7 @@ import app.seven.jotter.app.components.ActionEditorDialog
 import app.seven.jotter.app.theme.spacing
 
 @Composable
-fun NoteDialog(
+fun TaskNoteDialog(
     taskNote: String,
     onSave: (String) -> Unit,
     onCancel: () -> Unit,
@@ -27,7 +27,9 @@ fun NoteDialog(
             .imePadding(),
         title = "Note",
         onCancel = onCancel,
-        onConfirm = { onSave(note.value) }
+        onConfirm = {
+            onSave(note.value)
+        }
     ) {
         OutlinedTextField(
             modifier = Modifier
@@ -47,8 +49,8 @@ fun NoteDialog(
 
 @Preview
 @Composable
-fun NoteDialogDialogPreview() {
-    NoteDialog(
+fun TaskNoteDialogPreview() {
+    TaskNoteDialog(
         taskNote = "",
         onCancel = { /*TODO*/ },
         onSave = {}

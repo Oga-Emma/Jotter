@@ -20,8 +20,9 @@ import app.seven.jotter.app.components.CustomDatePikerDialog
 import app.seven.jotter.app.components.ObserveFlowStateAsEvents
 import app.seven.jotter.app.components.keyboardAsState
 import app.seven.jotter.app.screens.taskeditorscreen.component.EditTaskReminder
-import app.seven.jotter.app.screens.taskeditorscreen.dialogs.NoteDialog
-import app.seven.jotter.app.screens.taskeditorscreen.dialogs.SelectCategoryDialog
+import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TaskNoteDialog
+import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TaskCategoryDialog
+import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TaskCheckListDialog
 import app.seven.jotter.app.theme.JotterTheme
 import app.seven.jotter.core.models.TaskCategory
 import app.seven.jotter.core.models.TaskModel
@@ -82,7 +83,7 @@ class TaskEditorActivity : ComponentActivity() {
                     if (showDialogEvent.value != null) {
                         when (showDialogEvent.value!!.dialogType) {
                             DialogType.CATEGORY -> {
-                                SelectCategoryDialog(
+                                TaskCategoryDialog(
                                     categories = TaskCategory.entries,
                                     onCancel = ::closeDialog,
                                     onChangeCategory = { updateTask(task.copy(category = it)) }
@@ -102,26 +103,31 @@ class TaskEditorActivity : ComponentActivity() {
                                     onSave = {
                                         updateTask(task.copy(reminders = it))
                                     },
-                                    onDismiss = {
-                                        taskEditorViewModel.onAction(TaskEditorUIActions.CloseDialog)
-                                    })
+                                    onDismiss = ::closeDialog
+                                )
                             }
 
                             DialogType.NOTE -> {
-                                NoteDialog(
+                                TaskNoteDialog(
                                     taskNote = task.note,
                                     onSave = {
                                         updateTask(task.copy(note = it))
                                     },
-                                    onCancel = {
-                                        taskEditorViewModel.onAction(TaskEditorUIActions.CloseDialog)
-                                    }
+                                    onCancel = ::closeDialog
                                 )
                             }
 
-                            DialogType.CHECKLIST -> TODO()
-                            DialogType.PRIORITY -> TODO()
-                            DialogType.NONE -> Unit
+                            DialogType.CHECKLIST -> {
+                                TaskCheckListDialog(
+                                    list = task.checkList,
+                                    onSave = {
+                                        updateTask(task.copy(checkList = it))
+                                    },
+                                    onCancel = ::closeDialog
+                                )
+                            }
+
+                            else -> Unit
                         }
                     }
 

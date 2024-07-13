@@ -3,13 +3,12 @@ package app.seven.jotter.app.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AlarmOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,8 +34,32 @@ fun CircularIcon(
     }
 }
 
+@Composable
+fun CircularAvatar(
+    modifier: Modifier = Modifier,
+    backgroundColor: Color = MaterialTheme.colorScheme.primary,
+    content: @Composable () -> Unit
+) {
+    Box(
+        modifier = modifier
+            .clip(shape = CircleShape)
+            .background(color = backgroundColor.copy(alpha = 0.1f))
+            .padding(spacing().xSmall)
+    ) {
+       content()
+    }
+}
+
 @Preview
 @Composable
 fun CircularIconPreview() {
     CircularIcon(imageVector = Icons.Default.AlarmOff, contentDescription = "")
+}
+
+@Preview
+@Composable
+fun CircularAvatarPreview() {
+    CircularAvatar {
+        Text(text = "0")
+    }
 }

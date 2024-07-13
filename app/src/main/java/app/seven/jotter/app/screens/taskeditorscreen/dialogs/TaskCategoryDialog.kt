@@ -26,7 +26,7 @@ import app.seven.jotter.core.extensions.titleCase
 import app.seven.jotter.core.models.TaskCategory
 
 @Composable
-fun SelectCategoryDialog(
+fun TaskCategoryDialog(
     categories: List<TaskCategory>,
     onCancel: () -> Unit,
     onChangeCategory: (TaskCategory) -> Unit,
@@ -78,8 +78,8 @@ fun SelectCategoryDialog(
 
 @Preview
 @Composable
-fun SelectCategoryDialogPreview() {
-    SelectCategoryDialog(
+fun TaskCategoryDialogPreview() {
+    TaskCategoryDialog(
         categories = TaskCategory.entries,
         onCancel = { /*TODO*/ }) {
     }

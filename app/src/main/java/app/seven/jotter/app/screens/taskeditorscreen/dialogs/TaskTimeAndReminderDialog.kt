@@ -48,7 +48,7 @@ import java.time.LocalTime
 import java.util.UUID
 
 @Composable
-fun TimeAndReminderDialog(
+fun TaskTimeAndReminderDialog(
     reminders: List<TaskReminder>,
     onCancel: () -> Unit,
     onEditReminder: (TaskReminder) -> Unit,
@@ -280,7 +280,7 @@ fun ReminderItem(
 @Preview
 @Composable
 fun TimeAndReminderDialogPreview() {
-    TimeAndReminderDialog(
+    TaskTimeAndReminderDialog(
         reminders = listOf(
             TaskReminder(
                 id = UUID.randomUUID(),
