@@ -174,9 +174,8 @@ fun TaskEditor(
                     onAction(TaskEditorUIActions.EditCheckList)
                 }
             )
-
+            CustomDivider()
         }
-        CustomDivider()
         Spacer(
             modifier = Modifier
                 .padding(vertical = spacing().small)

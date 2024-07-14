@@ -21,7 +21,7 @@
             android:theme="@style/Theme.Jotter" />
 
         <activity
-            android:name=".app.screens.mainscreen.MainActivity"
+            android:name=".app.screens.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Jotter">

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Jotter</string>
     <string name="title_activity_task_editor">TaskEditorActivity</string>
+    <string name="task_editor_screen_title">\"Add or Edit Task</string>
 </resources>
