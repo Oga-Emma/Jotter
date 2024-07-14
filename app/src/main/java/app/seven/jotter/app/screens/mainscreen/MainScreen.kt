@@ -1,12 +1,11 @@
 package app.seven.jotter.app.screens.mainscreen
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -14,7 +13,7 @@ import app.seven.jotter.R
 import app.seven.jotter.app.components.ObserveFlowStateAsEvents
 import app.seven.jotter.app.screens.mainscreen.appscaffold.components.BottomNavigationBar
 import app.seven.jotter.app.screens.mainscreen.appscaffold.model.NavItem
-import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppUIEvent
+import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppNavigation
 import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppViewModel
 import app.seven.jotter.app.screens.mainscreen.calendar.CalendarScreen
 import app.seven.jotter.app.screens.mainscreen.checklist.CheckListScreen
@@ -29,27 +28,14 @@ object HomeDestination : NavigationDestination {
 
 @Composable
 fun MainScreen(
-    navigateToEditTaskItem: () -> Unit
+    appViewModel: AppViewModel = hiltViewModel<AppViewModel>(),
+    navController: NavHostController = rememberNavController(),
+    onNavigate: (AppNavigation) -> Unit
 ) {
     val navItems =
         listOf(NavItem.Home, NavItem.Calendar, NavItem.List, NavItem.Timer)
 
-    val navController = rememberNavController()
-    val appViewModel = hiltViewModel<AppViewModel>()
-
-    ObserveFlowStateAsEvents(flow = appViewModel.uiNavigationEvent) { event ->
-        when (event) {
-            is AppUIEvent.AddTask -> {
-
-                navigateToEditTaskItem()
-//                Intent(this, TaskEditorActivity::class.java)
-//                    .also {
-//                        startActivity(it)
-//                    }
-
-            }
-        }
-    }
+    ObserveFlowStateAsEvents(flow = appViewModel.appNavigationEvent, onEvent = onNavigate)
 
     Scaffold(bottomBar = {
         BottomAppBar {
@@ -59,7 +45,7 @@ fun MainScreen(
         }
     }) { contentPadding ->
 
-        Surface(modifier = Modifier.padding(contentPadding)) {
+        Surface {
             NavHost(
                 navController, startDestination = navItems.first().path
             ) {
@@ -67,7 +53,7 @@ fun MainScreen(
                     route = navItems[0].path,
                     content = {
                         HomeScreen(
-                            onAppAction = appViewModel::onAction
+                            onAppNavigationAction = appViewModel::onAppNavigationAction
                         )
                     }
                 )
@@ -90,8 +76,6 @@ fun MainScreen(
                     }
                 )
             }
-
-
         }
     }
 }

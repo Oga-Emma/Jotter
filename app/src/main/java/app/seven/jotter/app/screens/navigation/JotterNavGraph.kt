@@ -16,6 +16,7 @@
 
 package app.seven.jotter.app.screens.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
@@ -23,6 +24,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import app.seven.jotter.app.screens.mainscreen.HomeDestination
 import app.seven.jotter.app.screens.mainscreen.MainScreen
+import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppNavigation
 import app.seven.jotter.app.screens.taskeditorscreen.TaskEditorDestination
 import app.seven.jotter.app.screens.taskeditorscreen.TaskEditorScreen
 
@@ -34,26 +36,30 @@ fun JotterNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
 ) {
+
+    fun handleNavigation(event: AppNavigation) {
+        Log.d("JOTTER_NAV_GRAPH", "JotterNavHost: $event")
+
+        when (event) {
+
+            is AppNavigation.ShowTaskEditorScreen -> {
+                navController.navigate(TaskEditorDestination.route)
+            }
+
+            is AppNavigation.NavigateBack -> navController.popBackStack()
+        }
+    }
+
     NavHost(
         navController = navController,
         startDestination = HomeDestination.route,
         modifier = modifier
     ) {
         composable(route = HomeDestination.route) {
-            MainScreen(
-                navigateToEditTaskItem = {
-                    navController.navigate(TaskEditorDestination.route)
-                },
-//                navigateToItemUpdate = {
-//                    navController.navigate("${ItemDetailsDestination.route}/${it}")
-//                }
-            )
+            MainScreen(onNavigate = ::handleNavigation)
         }
         composable(route = TaskEditorDestination.route) {
-            TaskEditorScreen(
-                navigateBack = { navController.popBackStack() },
-//                onNavigateUp = { navController.navigateUp() }
-            )
+            TaskEditorScreen(onNavigate = ::handleNavigation)
         }
 //        composable(
 //            route = ItemDetailsDestination.routeWithArgs,

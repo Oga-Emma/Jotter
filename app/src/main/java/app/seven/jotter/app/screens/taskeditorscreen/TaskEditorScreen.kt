@@ -4,12 +4,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -17,6 +16,8 @@ import app.seven.jotter.R
 import app.seven.jotter.app.components.CustomDatePikerDialog
 import app.seven.jotter.app.components.ObserveFlowStateAsEvents
 import app.seven.jotter.app.components.keyboardAsState
+import app.seven.jotter.app.screens.JotterTopAppBar
+import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppNavigation
 import app.seven.jotter.app.screens.taskeditorscreen.component.EditTaskReminder
 import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TaskCategoryDialog
 import app.seven.jotter.app.screens.taskeditorscreen.dialogs.TaskCheckListDialog
@@ -34,20 +35,20 @@ object TaskEditorDestination : NavigationDestination {
 @Composable
 fun TaskEditorScreen(
     taskEditorViewModel: TaskEditorViewModel = hiltViewModel<TaskEditorViewModel>(),
-    navigateBack: () -> Unit,
+    onNavigate: (AppNavigation) -> Unit
 ) {
-    val showDialogEvent = rememberSaveable {
+    var showDialogEvent by rememberSaveable {
         mutableStateOf<TaskEditorUIEvents.ShowDialog<*>?>(null)
     }
     val isKeyboardOpen by keyboardAsState()
     val keyboard = LocalSoftwareKeyboardController.current
 
-    val task = taskEditorViewModel.task.value
+    val task = taskEditorViewModel.task
 
     ObserveFlowStateAsEvents(flow = taskEditorViewModel.uiNavigationEvent) { event ->
         when (event) {
             is TaskEditorUIEvents.ShowDialog<*> -> {
-                showDialogEvent.value = if (event.dialogType == DialogType.NONE)
+                showDialogEvent = if (event.dialogType == DialogType.NONE)
                     null
                 else
                     event
@@ -68,18 +69,19 @@ fun TaskEditorScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(title = {
-                Text(
-                    text = "New Task",
-                )
-            })
+            JotterTopAppBar(
+                title = "Task Editor",
+                canNavigateBack = true,
+                centerAligned = true,
+                navigateUp = { onNavigate(AppNavigation.NavigateBack) }
+            )
         },
 
         modifier = Modifier.fillMaxSize()
     ) { innerPadding ->
 
-        if (showDialogEvent.value != null) {
-            when (showDialogEvent.value!!.dialogType) {
+        if (showDialogEvent != null) {
+            when (showDialogEvent!!.dialogType) {
                 DialogType.CATEGORY -> {
                     TaskCategoryDialog(
                         categories = TaskCategory.entries,
@@ -97,7 +99,7 @@ fun TaskEditorScreen(
 
                 DialogType.TIME_REMINDER -> {
                     EditTaskReminder(
-                        taskReminders = taskEditorViewModel.task.value.reminders,
+                        taskReminders = taskEditorViewModel.task.reminders,
                         onSave = {
                             updateTask(task.copy(reminders = it))
                         },
@@ -136,7 +138,7 @@ fun TaskEditorScreen(
                 if (isKeyboardOpen) {
                     keyboard?.hide()
                 } else {
-                    navigateBack()
+                    onNavigate(AppNavigation.NavigateBack)
                 }
             },
             onAction = taskEditorViewModel::onAction

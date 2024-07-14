@@ -2,7 +2,6 @@ package app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppAction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -11,25 +10,29 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppViewModel @Inject constructor() : ViewModel() {
-    private val _uiNavigationEvent = Channel<AppUIEvent>()
-    val uiNavigationEvent = _uiNavigationEvent.receiveAsFlow()
+    private val _appNavigation = Channel<AppNavigation>()
+    val appNavigationEvent = _appNavigation.receiveAsFlow()
 
-    fun onAction(action: AppAction) {
+    fun onAppNavigationAction(action: AppNavigationAction) {
+
         when (action) {
-            AppAction.AddTask -> viewModelScope.launch {
-                _uiNavigationEvent.send(AppUIEvent.AddTask)
+            is AppNavigationAction.AddTask -> viewModelScope.launch {
+                _appNavigation.send(AppNavigation.ShowTaskEditorScreen)
             }
-            else -> Unit
+
+            is AppNavigationAction.Back -> viewModelScope.launch {
+                _appNavigation.send(AppNavigation.NavigateBack)
+            }
         }
-
-
     }
 }
 
-sealed interface AppUIEvent {
-    data object AddTask : AppUIEvent
+sealed interface AppNavigation {
+    data object NavigateBack : AppNavigation
+    data object ShowTaskEditorScreen : AppNavigation
 }
 
-sealed interface AppAction {
-    data object AddTask : AppAction
+sealed interface AppNavigationAction {
+    data object Back : AppNavigationAction
+    data object AddTask : AppNavigationAction
 }

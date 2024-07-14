@@ -1,12 +1,13 @@
 package app.seven.jotter.app.screens.taskeditorscreen
 
 import android.util.Log
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import app.seven.jotter.core.models.TaskModel
 import app.seven.jotter.core.models.TaskModelCreator
-import app.seven.jotter.core.models.TaskReminder
 import app.seven.jotter.core.usecases.UpsertTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -21,7 +22,7 @@ class TaskEditorViewModel @Inject constructor(
     private val _uiNavigationEvent = Channel<TaskEditorUIEvents>()
     val uiNavigationEvent = _uiNavigationEvent.receiveAsFlow()
 
-    val task = mutableStateOf(TaskModelCreator.newTaskWithDefaultValues())
+    var task by mutableStateOf(TaskModelCreator.newTaskWithDefaultValues())
 
     private fun closeDialog() = viewModelScope.launch {
         showDialog(DialogType.NONE, null)
@@ -32,7 +33,7 @@ class TaskEditorViewModel @Inject constructor(
     }
 
     private fun updateTask(taskModel: TaskModel) {
-        task.value = taskModel
+        task = taskModel
     }
 
     fun onAction(action: TaskEditorUIActions) {
@@ -61,8 +62,7 @@ class TaskEditorViewModel @Inject constructor(
     }
 
     private fun saveTask(taskModel: TaskModel) = viewModelScope.launch {
-        task.value = taskModel
-
+        task = taskModel
     }
 }
 

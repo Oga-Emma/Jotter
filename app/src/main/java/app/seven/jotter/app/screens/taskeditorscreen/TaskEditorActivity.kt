@@ -44,7 +44,7 @@ class TaskEditorActivity : ComponentActivity() {
                 val isKeyboardOpen by keyboardAsState()
                 val keyboard = LocalSoftwareKeyboardController.current
 
-                val task = taskEditorViewModel.task.value
+                val task = taskEditorViewModel.task
 
                 ObserveFlowStateAsEvents(flow = taskEditorViewModel.uiNavigationEvent) { event ->
                     when (event) {
@@ -99,7 +99,7 @@ class TaskEditorActivity : ComponentActivity() {
 
                             DialogType.TIME_REMINDER -> {
                                 EditTaskReminder(
-                                    taskReminders = taskEditorViewModel.task.value.reminders,
+                                    taskReminders = taskEditorViewModel.task.reminders,
                                     onSave = {
                                         updateTask(task.copy(reminders = it))
                                     },

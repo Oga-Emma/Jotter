@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,19 +31,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppAction
+import app.seven.jotter.app.screens.JotterTopAppBar
+import app.seven.jotter.app.screens.mainscreen.appscaffold.viewmodel.AppNavigationAction
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onAppAction: (AppAction) -> Unit) {
+fun HomeScreen(onAppNavigationAction: (AppNavigationAction) -> Unit) {
     Column {
-        TopAppBar(title = { Text(text = "Today") }, actions = {
-            IconButton(onClick = {
-                onAppAction(AppAction.AddTask)
-            }) {
-                Icon(Icons.Default.Add, contentDescription = "Search")
-            }
-        })
+        JotterTopAppBar(
+            title = "Today",
+            actions = {
+                IconButton(onClick = {
+                    onAppNavigationAction(AppNavigationAction.AddTask)
+                }) {
+                    Icon(Icons.Default.Add, contentDescription = "Search")
+                }
+            },
+            canNavigateBack = false,
+        )
         Column(
             modifier = Modifier
                 .fillMaxHeight()
@@ -166,7 +170,7 @@ fun NextPrevButtonPreview() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onAppAction = {})
+    HomeScreen(onAppNavigationAction = {})
 }
 
 @Preview
