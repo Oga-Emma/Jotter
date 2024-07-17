@@ -61,7 +61,8 @@ fun TaskEditor(
     modifier: Modifier = Modifier,
     taskModel: TaskModel,
     onCancel: () -> Unit,
-    onAction: (TaskEditorUIActions) -> Unit
+    onAction: (TaskEditorUIActions) -> Unit,
+    onShowMessage: (String) -> Unit
 ) {
 
     val keyboardController = LocalSoftwareKeyboardController.current
@@ -181,9 +182,9 @@ fun TaskEditor(
                 .padding(vertical = spacing().small)
         )
         ConfirmCancelButton(onConfirm = {
-
             if(description.isBlank()){
                 isValid = false
+                onShowMessage("Please enter a valid description")
                 return@ConfirmCancelButton
             } else {
                 isValid = true
@@ -245,8 +246,8 @@ fun TaskEditorPreview() {
             taskModel = TaskModelCreator.newTaskWithDefaultValues(),
             onCancel = {},
             onAction = {
-
-            }
+            },
+            onShowMessage = {}
         )
     }
 }

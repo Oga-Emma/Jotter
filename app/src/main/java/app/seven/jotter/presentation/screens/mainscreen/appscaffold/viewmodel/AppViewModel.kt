@@ -10,29 +10,49 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AppViewModel @Inject constructor() : ViewModel() {
-    private val _appNavigation = Channel<AppNavigation>()
-    val appNavigationEvent = _appNavigation.receiveAsFlow()
+    private val _appNavigationEvent = Channel<AppNavigationEvent>()
+    val appNavigationEventFlow = _appNavigationEvent.receiveAsFlow()
 
-    fun onAppNavigationAction(action: AppNavigationAction) {
+    private val _popupMessageEvent = Channel<PopupMessageEvent>()
+    val popupMessageEvent = _popupMessageEvent.receiveAsFlow()
 
-        when (action) {
-            is AppNavigationAction.AddTask -> viewModelScope.launch {
-                _appNavigation.send(AppNavigation.ShowTaskEditorScreen)
+    fun navigate(to: AppNavigationAction) {
+        when (to) {
+            is AppNavigationAction.AddTaskScreen -> viewModelScope.launch {
+                _appNavigationEvent.send(AppNavigationEvent.ShowTaskEditorScreen)
             }
 
-            is AppNavigationAction.Back -> viewModelScope.launch {
-                _appNavigation.send(AppNavigation.NavigateBack)
+            is AppNavigationAction.PreviousScreen -> viewModelScope.launch {
+                _appNavigationEvent.send(AppNavigationEvent.NavigateBack)
+            }
+        }
+    }
+
+    fun showSnackBar(to: PopupMessageAction) {
+        when (to) {
+            is PopupMessageAction.Toast -> viewModelScope.launch {
+                _popupMessageEvent.send(
+                    PopupMessageEvent.Toast(to.message)
+                )
             }
         }
     }
 }
 
-sealed interface AppNavigation {
-    data object NavigateBack : AppNavigation
-    data object ShowTaskEditorScreen : AppNavigation
+sealed interface AppNavigationEvent {
+    data object NavigateBack : AppNavigationEvent
+    data object ShowTaskEditorScreen : AppNavigationEvent
 }
 
 sealed interface AppNavigationAction {
-    data object Back : AppNavigationAction
-    data object AddTask : AppNavigationAction
+    data object PreviousScreen : AppNavigationAction
+    data object AddTaskScreen : AppNavigationAction
+}
+
+sealed interface PopupMessageEvent {
+    data class Toast(val message: String) : PopupMessageEvent
+}
+
+sealed interface PopupMessageAction {
+    data class Toast(val message: String) : PopupMessageAction
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.inventory.ui.navigation
+package app.seven.jotter.presentation.helpers
 
 /**
  * Interface to describe the navigation destinations for the app

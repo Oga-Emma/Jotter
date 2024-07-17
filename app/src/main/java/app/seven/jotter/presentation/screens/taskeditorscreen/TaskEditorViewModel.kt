@@ -1,6 +1,5 @@
 package app.seven.jotter.presentation.screens.taskeditorscreen
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -24,12 +23,10 @@ class TaskEditorViewModel @Inject constructor(
 
     var task by mutableStateOf(TaskModelCreator.newTaskWithDefaultValues())
 
-    private fun closeDialog() = viewModelScope.launch {
-        showDialog(DialogType.NONE, null)
-    }
+    private fun closeDialog() = showDialog(DialogType.NONE)
 
-    private fun <T> showDialog(type: DialogType, data: T? = null) = viewModelScope.launch {
-        _uiNavigationEvent.send(TaskEditorUIEvents.ShowDialog(type, data))
+    private fun showDialog(type: DialogType) = viewModelScope.launch {
+        _uiNavigationEvent.send(TaskEditorUIEvents.ShowDialog(type))
     }
 
     private fun updateTask(taskModel: TaskModel) {
@@ -37,28 +34,17 @@ class TaskEditorViewModel @Inject constructor(
     }
 
     fun onAction(action: TaskEditorUIActions) {
-
-        Log.d("ON_ACTION", "$action")
         when (action) {
             is TaskEditorUIActions.CloseDialog -> closeDialog()
-            is TaskEditorUIActions.SelectCategory -> showDialog(DialogType.CATEGORY, null)
-            is TaskEditorUIActions.EditCheckList -> showDialog(DialogType.CHECKLIST, null)
-            is TaskEditorUIActions.EditNote -> showDialog(DialogType.NOTE, null)
-            is TaskEditorUIActions.SelectPriority -> showDialog(DialogType.PRIORITY, null)
-            is TaskEditorUIActions.SelectDate -> showDialog(DialogType.DATE, null)
-            is TaskEditorUIActions.EditReminder -> {
-                showDialog(DialogType.TIME_REMINDER, null)
-            }
-
+            is TaskEditorUIActions.SelectCategory -> showDialog(DialogType.CATEGORY)
+            is TaskEditorUIActions.EditCheckList -> showDialog(DialogType.CHECKLIST)
+            is TaskEditorUIActions.EditNote -> showDialog(DialogType.NOTE)
+            is TaskEditorUIActions.SelectPriority -> showDialog(DialogType.PRIORITY)
+            is TaskEditorUIActions.SelectDate -> showDialog(DialogType.DATE)
+            is TaskEditorUIActions.EditReminder -> showDialog(DialogType.TIME_REMINDER)
             is TaskEditorUIActions.SaveTask -> saveTask(action.data)
-            is TaskEditorUIActions.UpdateTask -> {
-                viewModelScope.launch {
-                    updateTask(action.data)
-                }
-            }
-
+            is TaskEditorUIActions.UpdateTask -> updateTask(action.data)
         }
-
     }
 
     private fun saveTask(taskModel: TaskModel) = viewModelScope.launch {
@@ -67,7 +53,7 @@ class TaskEditorViewModel @Inject constructor(
 }
 
 sealed interface TaskEditorUIEvents {
-    data class ShowDialog<T>(val dialogType: DialogType, val data: T?) : TaskEditorUIEvents
+    data class ShowDialog(val dialogType: DialogType) : TaskEditorUIEvents
 }
 
 sealed interface TaskEditorUIActions {
@@ -84,9 +70,5 @@ sealed interface TaskEditorUIActions {
 
 enum class DialogType {
     NONE, CATEGORY, DATE, TIME_REMINDER, PRIORITY, NOTE, CHECKLIST
-}
-
-enum class TimeReminderActionType {
-    DEFAULT, SET_TIME
 }
 

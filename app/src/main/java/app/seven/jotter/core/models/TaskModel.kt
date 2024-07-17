@@ -36,36 +36,9 @@ object TaskModelCreator {
     )
 }
 
-enum class TaskCategory {
-    TASK,
-    WORK,
-    HEALTH,
-    FOOD,
-    SPORT
-}
-
 data class TaskReminder(
     val id: UUID,
     val type: TaskReminderType,
     val time: LocalTime
 )
 
-enum class TaskReminderType {
-    NONE,
-    ALARM,
-    NOTIFICATION,
-}
-
-enum class TaskPriority {
-    LOW,
-    MEDIUM,
-    HIGH
-}
-
-enum class TaskFrequency {
-    ONCE,
-    DAILY,
-    WEEKLY,
-    WEEKDAYS,
-    WEEKENDS,
-}

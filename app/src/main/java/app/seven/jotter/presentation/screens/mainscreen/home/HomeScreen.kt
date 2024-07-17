@@ -36,13 +36,13 @@ import app.seven.jotter.presentation.screens.mainscreen.appscaffold.viewmodel.Ap
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onAppNavigationAction: (AppNavigationAction) -> Unit) {
+fun HomeScreen(onNavigationAction: (AppNavigationAction) -> Unit) {
     Column {
         JotterTopAppBar(
             title = "Today",
             actions = {
                 IconButton(onClick = {
-                    onAppNavigationAction(AppNavigationAction.AddTask)
+                    onNavigationAction(AppNavigationAction.AddTaskScreen)
                 }) {
                     Icon(Icons.Default.Add, contentDescription = "Search")
                 }
@@ -170,7 +170,7 @@ fun NextPrevButtonPreview() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onAppNavigationAction = {})
+    HomeScreen(onNavigationAction = {})
 }
 
 @Preview

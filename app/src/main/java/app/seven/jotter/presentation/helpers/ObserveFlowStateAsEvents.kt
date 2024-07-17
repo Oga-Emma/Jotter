@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.components
+package app.seven.jotter.presentation.helpers
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -14,6 +14,12 @@ fun <T> ObserveFlowStateAsEvents(
     flow: Flow<T>,
     onEvent: (T) -> Unit
 ) {
+    /**
+     * LifecycleEventEffect(Lifecycle.Event.ON_RESUME){
+     *         LocalLifecycleOwner.current.lifecycleScope.launch {  }
+     *         Log.d("JOTTER_NAV_GRAPH", "onResume")
+     *     }
+     */
     val lifecycleOwner = LocalLifecycleOwner.current
     LaunchedEffect(flow, lifecycleOwner.lifecycle) {
         lifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
