@@ -25,15 +25,25 @@ class RoomTypeConverters {
     }
 
     @TypeConverter
-    fun stringToLocalTime(value: Long?): LocalTime? {
-        return value?.let {
-            Instant.ofEpochMilli(value).atZone(ZoneId.systemDefault()).toLocalTime()
-        }
+    fun stringToLocalTime(value: String?): LocalTime? {
+        try {
+            if (value != null) {
+                val split = value.split(":")
+                if (split.size == 3) {
+
+                    return LocalTime.of(split[0].toInt(), split[1].toInt(), split[2].toInt())
+                }
+            }
+        } catch (_: Exception) { }
+
+        return LocalTime.now()
     }
 
     @TypeConverter
-    fun localTimeToString(time: LocalDate?): Long? {
-        return time?.atStartOfDay(ZoneId.systemDefault())?.toEpochSecond()
+    fun localTimeToString(time: LocalTime?): String? {
+        return time?.let {
+            "${it.hour}:${it.minute}:${it.second}"
+        }
     }
 
     @TypeConverter

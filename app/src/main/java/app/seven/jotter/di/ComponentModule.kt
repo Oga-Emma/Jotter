@@ -1,16 +1,10 @@
 package app.seven.jotter.di
 
-import android.content.Context
-import androidx.room.Room
-import app.seven.jotter.common.Constants
-import app.seven.jotter.core.data.local.daos.TaskDao
-import app.seven.jotter.core.data.local.daos.TaskReminderDao
-import app.seven.jotter.core.database.AppDatabase
 import app.seven.jotter.core.mappers.TaskEntityMapper
+import app.seven.jotter.core.mappers.TaskReminderEntityMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -22,5 +16,11 @@ object ComponentModule {
     @Provides
     fun provideTaskEntityMapper(): TaskEntityMapper {
         return TaskEntityMapper()
+    }
+
+    @Singleton
+    @Provides
+    fun provideTTaskReminderEntityMapper(): TaskReminderEntityMapper {
+        return TaskReminderEntityMapper()
     }
 }
