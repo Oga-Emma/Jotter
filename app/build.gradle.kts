@@ -85,6 +85,8 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     kapt(libs.hilt.android.compiler)
 
+    implementation(libs.gson)
+
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
     // Test Libs

@@ -3,11 +3,14 @@ package app.seven.jotter.presentation.screens.mainscreen.appscaffold.model
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Checklist
+import androidx.compose.material.icons.filled.Dashboard
 import androidx.compose.material.icons.filled.DashboardCustomize
 import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Checklist
+import androidx.compose.material.icons.outlined.Dashboard
 import androidx.compose.material.icons.outlined.DashboardCustomize
+import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Timer
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -29,8 +32,8 @@ sealed class NavItem {
         NavigationItem(
             path = NavPath.HOME.toString(),
             title = NavTitle.HOME,
-            selectedIcon = Icons.Filled.DashboardCustomize,
-            unselectedIcon = Icons.Outlined.DashboardCustomize,
+            selectedIcon = Icons.Filled.Dashboard,
+            unselectedIcon = Icons.Outlined.Dashboard,
         )
 
     object Calendar :
@@ -58,7 +61,7 @@ sealed class NavItem {
 }
 
 object NavTitle {
-    const val HOME = "Today"
+    const val HOME = "Dashboard"
     const val CALENDAR = "Calender"
     const val LIST = "Checklist"
     const val TIMER = "Timer"

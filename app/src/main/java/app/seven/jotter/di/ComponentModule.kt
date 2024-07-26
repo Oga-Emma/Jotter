@@ -6,6 +6,7 @@ import app.seven.jotter.common.Constants
 import app.seven.jotter.core.data.local.daos.TaskDao
 import app.seven.jotter.core.data.local.daos.TaskReminderDao
 import app.seven.jotter.core.database.AppDatabase
+import app.seven.jotter.core.mappers.TaskEntityMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,27 +16,11 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object AppModule {
+object ComponentModule {
 
     @Singleton
     @Provides
-    fun provideDB(@ApplicationContext appContext: Context): AppDatabase {
-        return Room.databaseBuilder(
-            appContext,
-            AppDatabase::class.java,
-            Constants.DB_NAME
-        ).build()
-    }
-
-    @Singleton
-    @Provides
-    fun provideTaskDao(appDatabase: AppDatabase): TaskDao {
-        return appDatabase.taskDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideTaskReminderEntityDao(appDatabase: AppDatabase): TaskReminderDao {
-        return appDatabase.taskReminderDao()
+    fun provideTaskEntityMapper(): TaskEntityMapper {
+        return TaskEntityMapper()
     }
 }
