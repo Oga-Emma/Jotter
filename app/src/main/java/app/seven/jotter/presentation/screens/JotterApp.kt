@@ -20,13 +20,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import app.seven.jotter.presentation.helpers.ObserveFlowStateAsEvents
-import app.seven.jotter.presentation.screens.mainscreen.MainScreenDestination
-import app.seven.jotter.presentation.screens.mainscreen.MainScreen
-import app.seven.jotter.presentation.screens.mainscreen.appscaffold.viewmodel.AppNavigationEvent
-import app.seven.jotter.presentation.screens.mainscreen.appscaffold.viewmodel.AppViewModel
-import app.seven.jotter.presentation.screens.mainscreen.appscaffold.viewmodel.PopupMessageEvent
-import app.seven.jotter.presentation.screens.taskeditorscreen.TaskEditorDestination
-import app.seven.jotter.presentation.screens.taskeditorscreen.TaskEditorScreen
+import app.seven.jotter.presentation.screens.appscaffold.MainScreenDestination
+import app.seven.jotter.presentation.screens.appscaffold.MainScreen
+import app.seven.jotter.presentation.screens.appscaffold.appscaffold.viewmodel.AppNavigationEvent
+import app.seven.jotter.presentation.screens.appscaffold.appscaffold.viewmodel.AppViewModel
+import app.seven.jotter.presentation.screens.appscaffold.appscaffold.viewmodel.PopupMessageEvent
+import app.seven.jotter.presentation.screens.taskeditors.TaskEditorDestination
+import app.seven.jotter.presentation.screens.taskeditors.TaskEditorScreen
 
 
 @Composable

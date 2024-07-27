@@ -1,5 +1,6 @@
 package app.seven.jotter.presentation.components
 
+import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -40,13 +41,21 @@ fun CircularAvatar(
     backgroundColor: Color = MaterialTheme.colorScheme.primary,
     content: @Composable () -> Unit
 ) {
+    val bColor = if (backgroundColor == Color.Transparent) {
+        Color.Transparent
+    } else {
+        backgroundColor.copy(alpha = 0.1f)
+    }
+
     Box(
         modifier = modifier
             .clip(shape = CircleShape)
-            .background(color = backgroundColor.copy(alpha = 0.1f))
+            .background(
+                color = bColor
+            )
             .padding(spacing().xSmall)
     ) {
-       content()
+        content()
     }
 }
 

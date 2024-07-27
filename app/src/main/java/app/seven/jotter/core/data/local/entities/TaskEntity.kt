@@ -1,5 +1,6 @@
 package app.seven.jotter.core.data.local.entities
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import app.seven.jotter.core.models.TaskCategory
@@ -18,6 +19,8 @@ data class TaskEntity(
     val category: TaskCategory,
     val date: LocalDate,
     val priority: TaskPriority,
+
+    @ColumnInfo(name = "check_list")
     val checkList: List<TaskCheckListItem>,
     val frequency: TaskFrequency
 )
