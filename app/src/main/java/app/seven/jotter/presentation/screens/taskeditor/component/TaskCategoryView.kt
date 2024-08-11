@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors.component
+package app.seven.jotter.presentation.screens.taskeditor.component
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.Text

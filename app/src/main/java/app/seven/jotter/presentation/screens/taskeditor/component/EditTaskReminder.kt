@@ -1,12 +1,12 @@
-package app.seven.jotter.presentation.screens.taskeditors.component
+package app.seven.jotter.presentation.screens.taskeditor.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import app.seven.jotter.presentation.components.CustomTimePikerDialog
-import app.seven.jotter.presentation.screens.taskeditors.dialogs.EditReminderDialog
-import app.seven.jotter.presentation.screens.taskeditors.dialogs.TaskTimeAndReminderDialog
+import app.seven.jotter.presentation.screens.taskeditor.dialogs.EditReminderDialog
+import app.seven.jotter.presentation.screens.taskeditor.dialogs.TaskTimeAndReminderDialog
 import app.seven.jotter.core.models.TaskReminder
 
 @Composable

@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors.dialogs
+package app.seven.jotter.presentation.screens.taskeditor.dialogs
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
@@ -34,7 +34,7 @@ fun TaskNoteDialog(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(spacing().small),
+                .padding(spacing.small),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = Color.LightGray
             ),

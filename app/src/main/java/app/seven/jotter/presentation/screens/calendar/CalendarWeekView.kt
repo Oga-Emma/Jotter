@@ -1,27 +1,26 @@
 package app.seven.jotter.presentation.screens.calendar
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import app.seven.jotter.common.extensions.titleCase
 import app.seven.jotter.presentation.components.CircularAvatar
 import app.seven.jotter.presentation.theme.pallet
 import app.seven.jotter.presentation.theme.spacing
@@ -43,101 +42,102 @@ val mapOfDaysAndValue = mapOf(
     DayOfWeek.SATURDAY to 6,
 )
 
+enum class CalenderMode {
+    MONTH, WEEK
+}
+
 @Composable
-fun CalendarView() {
-    var isExpanded by rememberSaveable { mutableStateOf(false) }
+fun CalendarView(calenderMode: CalenderMode, date: LocalDate, onDateChanged: (LocalDate) -> Unit) {
+    val isMonthView = calenderMode == CalenderMode.MONTH
+
+    fun nextDate(isMonth: Boolean) {
+        onDateChanged(
+            if (isMonth) {
+                date.plusMonths(1)
+            } else {
+                date.plusWeeks(1)
+            }
+        )
+    }
+
+    fun prevDate(isMonth: Boolean) {
+        onDateChanged(
+            if (isMonth) {
+                date.minusMonths(1)
+            } else {
+                date.minusWeeks(1)
+            }
+        )
+    }
 
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            listOfWeekDays.map {
-                Column(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(spacing().small),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Text(
-                        text = it,
-                        fontSize = textSize().lSmall,
-                        color = Color.Gray
-                    )
-                }
-            }
-        }
-        AnimatedVisibility(isExpanded) {
-            CalendarMonthView()
+
+        HeaderView(
+            month = if (isMonthView || date.dayOfMonth / 7 > 0) {
+                date.month
+            } else {
+                date.minusMonths(1L).month
+            }.name.titleCase(),
+            onNext = { nextDate(isMonthView) },
+            onPrevious = { prevDate(isMonthView) }
+        )
+
+        WeekHeader()
+
+        AnimatedVisibility(isMonthView) {
+            CalendarMonthView(date = date)
         }
 
-        AnimatedVisibility(!isExpanded) {
-            CalendarWeekView()
+        AnimatedVisibility(!isMonthView) {
+            CalendarWeekView(date = date)
         }
 
-        Row(
-            modifier = Modifier.clickable {
-                isExpanded = !isExpanded
-            },
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = if (isExpanded) "Collapse" else "Expand",
-                fontSize = textSize().lSmall,
-                color = Color.Gray
-            )
-            Spacer(modifier = Modifier.size(spacing().small))
-            Icon(
-                modifier = Modifier.size(spacing().lSmall),
-                imageVector = if (isExpanded) {
-                    Icons.Default.KeyboardArrowUp
-                } else {
-                    Icons.Default.KeyboardArrowDown
-                },
-                tint = Color.Gray,
-                contentDescription = ""
-            )
-        }
+        /* Row(
+             modifier = Modifier
+                 .fillMaxWidth()
+                 .padding(spacing.xSmall)
+                 .clickable { isExpanded = !isExpanded },
+             verticalAlignment = Alignment.CenterVertically,
+             horizontalArrangement = Arrangement.Center
+         ) {
+             Text(
+                 text = if (isExpanded) "Collapse" else "Expand",
+                 fontSize = textSize.lSmall,
+                 color = Color.Gray
+             )
+             Spacer(modifier = Modifier.size(spacing.small))
+             Icon(
+                 modifier = Modifier.size(spacing.lSmall),
+                 imageVector = if (isExpanded) {
+                     Icons.Default.KeyboardArrowUp
+                 } else {
+                     Icons.Default.KeyboardArrowDown
+                 },
+                 tint = Color.Gray,
+                 contentDescription = ""
+             )
+         }*/
     }
 }
 
 @Composable
-fun CalendarWeekView() {
+fun CalendarWeekView(date: LocalDate) {
     val today = LocalDate.now()
-    val dayOfWeek = today.dayOfWeek
-
-    val dayValue = when (dayOfWeek) {
-        DayOfWeek.SUNDAY -> 0
-        DayOfWeek.MONDAY -> 1
-        DayOfWeek.TUESDAY -> 2
-        DayOfWeek.WEDNESDAY -> 3
-        DayOfWeek.THURSDAY -> 4
-        DayOfWeek.FRIDAY -> 4
-        DayOfWeek.SATURDAY -> 6
-        else -> 0
-    }
-
-    val monday = today.minusDays(dayValue.toLong())
+    val dayOfWeek = date.dayOfWeek
+    val monday = date.minusDays(mapOfDaysAndValue[dayOfWeek]!!.toLong())
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Row() {
-            listOf(
-                DayOfWeek.SUNDAY,
-                DayOfWeek.MONDAY,
-                DayOfWeek.TUESDAY,
-                DayOfWeek.WEDNESDAY,
-                DayOfWeek.THURSDAY,
-                DayOfWeek.FRIDAY,
-                DayOfWeek.SATURDAY,
-            ).map {
+            mapOfDaysAndValue.keys.map {
                 val day = monday.plusDays(mapOfDaysAndValue[it]!!.toLong())
                 DayItem(
                     modifier = Modifier.weight(1f),
                     day = day.dayOfMonth,
-                    isToday = dayOfWeek == it,
+                    isToday = day == today,
                 )
             }
         }
@@ -145,10 +145,9 @@ fun CalendarWeekView() {
 }
 
 @Composable
-fun CalendarMonthView() {
-
+fun CalendarMonthView(date: LocalDate) {
     val today = LocalDate.now()
-    val daysOfMonthChucked = getDaysOfMonth(today.year, today.month)
+    val daysOfMonthChucked = getDaysOfMonth(date.year, date.month)
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
@@ -161,8 +160,9 @@ fun CalendarMonthView() {
                 list.map { day ->
                     DayItem(
                         modifier = Modifier.weight(1f),
-                        day = day,
-                        isToday = day == today.dayOfMonth,
+                        day = day.dayOfMonth,
+                        isToday = day == today,
+                        differentMonth = day.month != date.month,
                     )
                 }
             }
@@ -170,57 +170,98 @@ fun CalendarMonthView() {
     }
 }
 
-private fun getDaysOfMonth(year: Int, month: Month): List<List<Int>> {
+private fun getDaysOfMonth(year: Int, month: Month): List<List<LocalDate>> {
     val firstDayOfMonth = LocalDate.of(year, month, 1)
 
-    val arrayOfDays = Array(35) { -1 }
+    val arrayOfDates = Array<LocalDate>(35) { LocalDate.now() }
+    val daySlot = firstDayOfMonth.minusDays(mapOfDaysAndValue[firstDayOfMonth.dayOfWeek]!!.toLong())
 
-    fun isLeapYear(year: Int): Boolean {
-        // If the year is evenly divisible by 4, go to step 2. Otherwise, go to step 5.
-        // If the year is evenly divisible by 100, go to step 3. Otherwise, go to step 4.
-        // If the year is evenly divisible by 400, go to step 4. Otherwise, go to step 5.
-        // The year is a leap year (it has 366 days).
-        // The year is not a leap year (it has 365 days).
-
-        if (year % 4 == 0 && year % 100 != 0) return true
-        if (year % 4 == 0 && year % 100 == 0 && year % 400 == 0) return true
-        return false
+    for (i in arrayOfDates.indices) {
+        arrayOfDates[i] = daySlot.plusDays(i.toLong())
     }
 
-    fun lastDayOfMonth(year: Int, month: Month) = when (month) {
-        Month.APRIL, Month.JUNE, Month.SEPTEMBER, Month.NOVEMBER -> 30
-        Month.FEBRUARY -> {
-            if (isLeapYear(year)) 29 else 28
-        }
-
-        else -> {
-            31
-        }
-    }
-
-    var day = 1
-    for (i in mapOfDaysAndValue[firstDayOfMonth.dayOfWeek]!! until arrayOfDays.size) {
-        if (day > lastDayOfMonth(year, month)) {
-            break
-        }
-
-        arrayOfDays[i] = day++
-    }
-
-    return arrayOfDays.toList().chunked(7)
+    return arrayOfDates.toList().chunked(7)
 }
 
 @Composable
-fun DayItem(modifier: Modifier = Modifier, isToday: Boolean = false, day: Int) {
+fun DayItem(
+    modifier: Modifier = Modifier,
+    isToday: Boolean = false,
+    differentMonth: Boolean = false,
+    day: Int
+) {
     Column(
-        modifier = modifier.padding(spacing().small),
+        modifier = modifier.padding(spacing.small),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         CircularAvatar(
-            backgroundColor = if (isToday) pallet().primary else Color.Transparent
+            backgroundColor = if (isToday) pallet.primary else Color.Transparent
         ) {
-            Text(text = if (day == -1) "" else "$day")
+            Text(
+                text = if (day == -1) "" else "$day",
+                color = if (differentMonth) Color.LightGray else Color.Unspecified
+            )
         }
+    }
+}
+
+@Composable
+fun WeekHeader() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        listOfWeekDays.map {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(spacing.small),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = it,
+                    fontSize = textSize.lSmall,
+                    color = Color.Gray
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun HeaderView(
+    month: String,
+    onPrevious: () -> Unit,
+    onNext: () -> Unit,
+) {
+    Row(
+        modifier = Modifier,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        IconButton(onClick = onPrevious) {
+            Icon(
+                imageVector = Icons.Default.ChevronLeft,
+                contentDescription = ""
+            )
+        }
+        Spacer(modifier = Modifier.size(spacing.small))
+        Text(
+            modifier = Modifier.weight(1f),
+            text = month.titleCase(),
+            textAlign = TextAlign.Center
+        )
+        Spacer(modifier = Modifier.size(spacing.small))
+        IconButton(onClick = onNext) {
+            Icon(
+                imageVector = Icons.Default.ChevronRight,
+                contentDescription = ""
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+fun CalendarViewPreview() {
+    Surface {
+        CalendarView(calenderMode = CalenderMode.MONTH, date = LocalDate.now()){}
     }
 }
 
@@ -228,7 +269,7 @@ fun DayItem(modifier: Modifier = Modifier, isToday: Boolean = false, day: Int) {
 @Composable
 fun CalendarWeekViewPreview() {
     Surface {
-        CalendarWeekView()
+        CalendarWeekView(LocalDate.now())
     }
 }
 
@@ -236,6 +277,6 @@ fun CalendarWeekViewPreview() {
 @Composable
 fun CalendarMonthViewPreview() {
     Surface {
-        CalendarMonthView()
+        CalendarMonthView(LocalDate.now())
     }
 }

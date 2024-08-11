@@ -40,7 +40,7 @@ import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(onNavigationAction: (AppNavigationAction) -> Unit) {
+fun TodayScreen(onNavigationAction: (AppNavigationAction) -> Unit) {
 
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -78,7 +78,7 @@ fun HomeScreen(onNavigationAction: (AppNavigationAction) -> Unit) {
                 thickness = .5.dp,
                 color = Color.LightGray
             )
-            TasksList(
+            TodayTasks(
                 modifier = Modifier
                     .fillMaxHeight()
                     .padding(horizontal = 8.dp),
@@ -158,5 +158,5 @@ fun NextPrevButton() {
 @Preview
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(onNavigationAction = {})
+    TodayScreen(onNavigationAction = {})
 }

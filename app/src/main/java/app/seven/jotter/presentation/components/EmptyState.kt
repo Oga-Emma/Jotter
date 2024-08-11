@@ -29,7 +29,7 @@ fun EmptyState(modifier: Modifier = Modifier, icon: ImageVector, label: String) 
             contentDescription = "",
             tint = MaterialTheme.colorScheme.primary
         )
-        Spacer(modifier = Modifier.size(spacing().lSmall))
+        Spacer(modifier = Modifier.size(spacing.lSmall))
         Text(text = label)
     }
 }

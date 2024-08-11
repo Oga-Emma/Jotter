@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors.component
+package app.seven.jotter.presentation.screens.taskeditor.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddTask

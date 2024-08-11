@@ -1,6 +1,5 @@
 package app.seven.jotter.presentation.components
 
-import android.provider.CalendarContract.Colors
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -29,7 +28,7 @@ fun CircularIcon(
         modifier = modifier
             .clip(shape = CircleShape)
             .background(color = backgroundColor.copy(alpha = 0.1f))
-            .padding(spacing().xSmall)
+            .padding(spacing.xSmall)
     ) {
         Icon(imageVector, contentDescription, tint = backgroundColor)
     }
@@ -53,7 +52,7 @@ fun CircularAvatar(
             .background(
                 color = bColor
             )
-            .padding(spacing().xSmall)
+            .padding(spacing.xSmall)
     ) {
         content()
     }

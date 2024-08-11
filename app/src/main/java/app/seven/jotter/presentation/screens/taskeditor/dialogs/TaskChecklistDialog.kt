@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors.dialogs
+package app.seven.jotter.presentation.screens.taskeditor.dialogs
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -85,7 +85,7 @@ fun TaskCheckListDialog(
         Column{
             if (checkList.value.isEmpty()) {
                 EmptyState(
-                    modifier = Modifier.padding(spacing().medium),
+                    modifier = Modifier.padding(spacing.medium),
                     icon = Icons.Default.Checklist,
                     label = "No item added",
                 )
@@ -114,7 +114,7 @@ fun TaskCheckListDialog(
                     }
                 }) {
                 Icon(Icons.Rounded.AddCircleOutline, "")
-                Spacer(modifier = Modifier.size(spacing().small))
+                Spacer(modifier = Modifier.size(spacing.small))
                 Text(text = "NEW LIST ITEM")
             }
         }
@@ -145,7 +145,7 @@ fun EditTaskCheckListItemDialog(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(spacing().small),
+                .padding(spacing.small),
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = Color.LightGray
             ),
@@ -164,13 +164,13 @@ fun TaskCheckListDialogItem(
 ) {
     Column {
         Row(
-            modifier = Modifier.padding(vertical = spacing().small, horizontal = spacing().medium),
+            modifier = Modifier.padding(vertical = spacing.small, horizontal = spacing.medium),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = spacing().medium)
+                    .padding(end = spacing.medium)
                     .clickable { onEdit(item) },
                 text = item.description
             )

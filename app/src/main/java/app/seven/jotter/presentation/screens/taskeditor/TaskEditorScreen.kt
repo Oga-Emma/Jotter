@@ -1,5 +1,6 @@
-package app.seven.jotter.presentation.screens.taskeditors
+package app.seven.jotter.presentation.screens.taskeditor
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -10,22 +11,23 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.hilt.navigation.compose.hiltViewModel
 import app.seven.jotter.R
-import app.seven.jotter.presentation.components.CustomDatePikerDialog
-import app.seven.jotter.presentation.helpers.ObserveFlowStateAsEvents
-import app.seven.jotter.presentation.components.keyboardAsState
-import app.seven.jotter.presentation.screens.JotterTopAppBar
-import app.seven.jotter.presentation.screens.taskeditors.component.EditTaskReminder
-import app.seven.jotter.presentation.screens.taskeditors.dialogs.TaskCategoryDialog
-import app.seven.jotter.presentation.screens.taskeditors.dialogs.TaskCheckListDialog
-import app.seven.jotter.presentation.screens.taskeditors.dialogs.TaskNoteDialog
 import app.seven.jotter.core.models.TaskCategory
 import app.seven.jotter.core.models.TaskModel
+import app.seven.jotter.presentation.components.CustomDatePikerDialog
+import app.seven.jotter.presentation.components.keyboardAsState
 import app.seven.jotter.presentation.helpers.NavigationDestination
+import app.seven.jotter.presentation.helpers.ObserveFlowStateAsEvents
+import app.seven.jotter.presentation.screens.JotterTopAppBar
 import app.seven.jotter.presentation.screens.appscaffold.appscaffold.viewmodel.AppNavigationAction
 import app.seven.jotter.presentation.screens.appscaffold.appscaffold.viewmodel.PopupMessageAction
+import app.seven.jotter.presentation.screens.taskeditor.component.EditTaskReminder
+import app.seven.jotter.presentation.screens.taskeditor.dialogs.TaskCategoryDialog
+import app.seven.jotter.presentation.screens.taskeditor.dialogs.TaskCheckListDialog
+import app.seven.jotter.presentation.screens.taskeditor.dialogs.TaskNoteDialog
 import kotlin.reflect.KFunction1
 
 object TaskEditorDestination : NavigationDestination {
@@ -40,6 +42,8 @@ fun TaskEditorScreen(
     onNavigationAction: KFunction1<AppNavigationAction, Unit>,
     onShowPopupMessage: (PopupMessageAction) -> Unit,
 ) {
+    val context = LocalContext.current
+
     var showDialogEvent by remember { mutableStateOf(DialogType.NONE) }
 
     val isKeyboardOpen by keyboardAsState()
@@ -52,19 +56,25 @@ fun TaskEditorScreen(
             is TaskEditorUIEvents.ShowDialog -> {
                 showDialogEvent = event.dialogType
             }
+
+            is TaskEditorUIEvents.ShowToast -> {
+                Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+            }
+
+            TaskEditorUIEvents.NavigateBack -> {
+                onNavigationAction(AppNavigationAction.PreviousScreen)
+            }
         }
     }
 
-    fun updateTask(taskModel: TaskModel) {
+    fun closeDialog() =
+        viewModel.onAction(TaskEditorUIActions.CloseDialog)
+
+    fun updateTask(taskModel: TaskModel) =
         with(viewModel) {
             onAction(TaskEditorUIActions.UpdateTask(taskModel))
-            onAction(TaskEditorUIActions.CloseDialog)
+            closeDialog()
         }
-    }
-
-    fun closeDialog() {
-        viewModel.onAction(TaskEditorUIActions.CloseDialog)
-    }
 
     Scaffold(
         topBar = {
@@ -86,44 +96,48 @@ fun TaskEditorScreen(
                 TaskCategoryDialog(
                     categories = TaskCategory.entries,
                     onCancel = ::closeDialog,
-                    onChangeCategory = { updateTask(task.copy(category = it)) }
+                    onChangeCategory = {
+                        updateTask(task.copy(category = it))
+                    }
                 )
             }
 
             DialogType.DATE -> {
                 CustomDatePikerDialog(
-                    onDateSelected = { updateTask(task.copy(date = it)) },
-                    onDismiss = ::closeDialog
+                    onDismiss = ::closeDialog,
+                    onDateSelected = {
+                        updateTask(task.copy(date = it))
+                    }
                 )
             }
 
             DialogType.TIME_REMINDER -> {
                 EditTaskReminder(
                     taskReminders = viewModel.task.reminders,
+                    onDismiss = ::closeDialog,
                     onSave = {
                         updateTask(task.copy(reminders = it))
-                    },
-                    onDismiss = ::closeDialog
+                    }
                 )
             }
 
             DialogType.NOTE -> {
                 TaskNoteDialog(
                     taskNote = task.note,
+                    onCancel = ::closeDialog,
                     onSave = {
                         updateTask(task.copy(note = it))
-                    },
-                    onCancel = ::closeDialog
+                    }
                 )
             }
 
             DialogType.CHECKLIST -> {
                 TaskCheckListDialog(
                     list = task.checkList,
+                    onCancel = ::closeDialog,
                     onSave = {
                         updateTask(task.copy(checkList = it))
-                    },
-                    onCancel = ::closeDialog
+                    }
                 )
             }
 
@@ -137,7 +151,7 @@ fun TaskEditorScreen(
                 if (isKeyboardOpen) {
                     keyboard?.hide()
                 } else {
-                    onNavigationAction(AppNavigationAction.PreviousScreen)
+                    viewModel.onAction(TaskEditorUIActions.NavigateBack)
                 }
             },
             onAction = viewModel::onAction,

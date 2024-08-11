@@ -31,7 +31,7 @@ import app.seven.jotter.presentation.theme.spacing
 import app.seven.jotter.presentation.theme.textSize
 
 @Composable
-fun TasksList(modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun TodayTasks(modifier: Modifier = Modifier, onClick: () -> Unit) {
     LazyColumn(modifier = modifier) {
         item {
             Spacer(modifier = Modifier.padding(vertical = 4.dp))
@@ -67,7 +67,7 @@ fun TasksListItem(modifier: Modifier = Modifier, onClick: () -> Unit) {
                 Text("9:00", fontWeight = FontWeight.SemiBold)
                 Text("9:30", color = Color.Gray)
             }
-            Spacer(modifier = Modifier.padding(spacing().lSmall))
+            Spacer(modifier = Modifier.padding(spacing.lSmall))
             Column {
                 Row(
                     verticalAlignment = Alignment.CenterVertically
@@ -75,30 +75,29 @@ fun TasksListItem(modifier: Modifier = Modifier, onClick: () -> Unit) {
                     VerticalDivider(
                         modifier = Modifier.height(14.dp),
                         thickness = 2.dp,
-                        color = pallet().primary.copy(alpha = 0.6f)
+                        color = pallet.primary.copy(alpha = 0.6f)
                     )
-                    Spacer(modifier = Modifier.width(spacing().small))
+                    Spacer(modifier = Modifier.width(spacing.small))
                     Text(
                         modifier = Modifier.weight(1f),
                         text = "Meeting",
                         fontWeight = FontWeight.SemiBold,
-                        color = pallet().primary
+                        color = pallet.primary
                     )
-                    Spacer(modifier = Modifier.width(spacing().small))
-
+                    Spacer(modifier = Modifier.width(spacing.small))
                     TaskTypeArea()
                 }
                 Column() {
-                    Spacer(modifier = Modifier.height(spacing().small))
+                    Spacer(modifier = Modifier.height(spacing.small))
                     Text(
                         "Meeting with Boss",
-                        fontSize = textSize().medium,
+                        fontSize = textSize.medium,
                         fontWeight = FontWeight.SemiBold,
                     )
-                    Spacer(modifier = Modifier.height(spacing().small))
+                    Spacer(modifier = Modifier.height(spacing.small))
                     Text("Meeting to discuss future projects with boss", color = Color.Gray)
                     HorizontalDivider(
-                        modifier = Modifier.padding(vertical = spacing().small),
+                        modifier = Modifier.padding(vertical = spacing.small),
                         color = Color.LightGray.copy(0.2f)
                     )
                     Row(
@@ -125,20 +124,20 @@ fun ReminderField(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(spacing().medium),
+            modifier = Modifier.size(spacing.medium),
             imageVector = Icons.Default.Alarm,
             tint = Color.LightGray,
             contentDescription = "",
         )
-        Spacer(modifier = Modifier.width(spacing().xSmall))
+        Spacer(modifier = Modifier.width(spacing.xSmall))
         Text(
             text = "5pm",
             color = Color.LightGray,
-            fontSize = textSize().lSmall,
+            fontSize = textSize.lSmall,
         )
         VerticalDivider(
             modifier = Modifier
-                .padding(spacing().small)
+                .padding(spacing.small)
                 .height(10.dp),
             thickness = 2.dp,
             color = Color.LightGray
@@ -146,7 +145,7 @@ fun ReminderField(
         Text(
             text = "+ 2 more",
             color = Color.LightGray,
-            fontSize = textSize().lSmall,
+            fontSize = textSize.lSmall,
         )
     }
 }
@@ -160,16 +159,16 @@ fun TaskTypeArea(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            modifier = Modifier.size(spacing().medium),
+            modifier = Modifier.size(spacing.medium),
             imageVector = Icons.Default.RepeatOne,
             tint = Color.LightGray,
             contentDescription = "",
         )
-        Spacer(modifier = Modifier.width(spacing().xSmall))
+        Spacer(modifier = Modifier.width(spacing.xSmall))
         Text(
             text = "Once",
             color = Color.LightGray,
-            fontSize = textSize().lSmall,
+            fontSize = textSize.lSmall,
         )
     }
 }
@@ -177,7 +176,7 @@ fun TaskTypeArea(
 @Preview
 @Composable
 fun TasksListPreview() {
-    TasksList(onClick = {})
+    TodayTasks(onClick = {})
 }
 
 @Preview

@@ -44,7 +44,7 @@ fun CustomTimePikerDialog(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(
-                    spacing().medium
+                    spacing.medium
                 ),
             state = timePickerState
         )

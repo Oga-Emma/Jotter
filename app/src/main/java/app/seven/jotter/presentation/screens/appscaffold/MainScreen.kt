@@ -1,7 +1,11 @@
 package app.seven.jotter.presentation.screens.appscaffold
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Add
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -15,7 +19,7 @@ import app.seven.jotter.presentation.screens.appscaffold.appscaffold.components.
 import app.seven.jotter.presentation.screens.appscaffold.appscaffold.model.NavItem
 import app.seven.jotter.presentation.screens.calendar.CalendarScreen
 import app.seven.jotter.presentation.screens.checklist.CheckListScreen
-import app.seven.jotter.presentation.screens.today.HomeScreen
+import app.seven.jotter.presentation.screens.today.TodayScreen
 import app.seven.jotter.presentation.screens.timer.TimerScreen
 import app.seven.jotter.presentation.helpers.NavigationDestination
 import app.seven.jotter.presentation.screens.appscaffold.appscaffold.viewmodel.AppNavigationAction
@@ -33,13 +37,24 @@ fun MainScreen(
     val navItems =
         listOf(NavItem.Home, NavItem.Calendar, NavItem.List, NavItem.Timer)
 
-    Scaffold(bottomBar = {
-        BottomAppBar {
-            BottomNavigationBar(
-                navController = navController, items = navItems
-            )
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(onClick = {
+                destinationToNavIcon(navController.currentDestination?.route)?.let {
+                    onNavigate(it)
+                }
+            }) {
+                Icon(imageVector = Icons.Outlined.Add, contentDescription = "Add")
+            }
+        },
+        bottomBar = {
+            BottomAppBar {
+                BottomNavigationBar(
+                    navController = navController, items = navItems
+                )
+            }
         }
-    }) { contentPadding ->
+    ) { contentPadding ->
 
         Surface(
             modifier = Modifier.padding(
@@ -52,7 +67,7 @@ fun MainScreen(
                 composable(
                     route = navItems[0].path,
                     content = {
-                        HomeScreen(
+                        TodayScreen(
                             onNavigationAction = onNavigate
                         )
                     }
@@ -79,3 +94,10 @@ fun MainScreen(
         }
     }
 }
+
+fun destinationToNavIcon(destination: String?) =
+    when (destination) {
+        NavItem.Home.path -> AppNavigationAction.AddTaskScreen
+        NavItem.Calendar.path -> AppNavigationAction.AddTaskScreen
+        else -> AppNavigationAction.DoNothing
+    }

@@ -25,6 +25,8 @@ class AppViewModel @Inject constructor() : ViewModel() {
             is AppNavigationAction.PreviousScreen -> viewModelScope.launch {
                 _appNavigationEvent.send(AppNavigationEvent.NavigateBack)
             }
+
+            AppNavigationAction.DoNothing -> Unit
         }
     }
 
@@ -47,6 +49,7 @@ sealed interface AppNavigationEvent {
 sealed interface AppNavigationAction {
     data object PreviousScreen : AppNavigationAction
     data object AddTaskScreen : AppNavigationAction
+    data object DoNothing : AppNavigationAction
 }
 
 sealed interface PopupMessageEvent {

@@ -2,7 +2,9 @@ package app.seven.jotter.presentation.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -62,14 +64,14 @@ fun JotterTheme(
     }
 }
 
-@Composable
-fun pallet() = MaterialTheme.colorScheme
+val pallet: ColorScheme
+    @Composable get() = MaterialTheme.colorScheme
 
-@Composable
-fun spacing() = MaterialTheme.spacing
+val spacing: Spacing
+    @Composable get() = MaterialTheme.spacing
 
-@Composable
-fun textSize() = MaterialTheme.textSize
+val textSize: TextSize
+    @Composable get() = MaterialTheme.textSize
 
-@Composable
-fun shapes() = MaterialTheme.shapes
+val shapes: Shapes
+    @Composable get() = MaterialTheme.shapes

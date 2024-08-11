@@ -73,42 +73,42 @@ fun TaskDetails(
     closeBottomSheet: () -> Unit
 ) {
     Column(
-        modifier = Modifier.padding(bottom = spacing().medium)
+        modifier = Modifier.padding(bottom = spacing.medium)
     ) {
         Text(
-            modifier = Modifier.padding(spacing().medium),
+            modifier = Modifier.padding(spacing.medium),
             text = "Do some random stuff",
-            fontSize = textSize().lMedium
+            fontSize = textSize.lMedium
         )
         LabelWithIcon(content = "Apr 5", icon = Icons.Outlined.CalendarToday)
-        HorizontalDivider(modifier = Modifier.padding(vertical = spacing().lSmall))
+        HorizontalDivider(modifier = Modifier.padding(vertical = spacing.lSmall))
         TaskStatusArea()
-        HorizontalDivider(modifier = Modifier.padding(vertical = spacing().lSmall))
+        HorizontalDivider(modifier = Modifier.padding(vertical = spacing.lSmall))
         LabelWithIcon(
             heading = "Reminders",
             content = "07:00 AM • O6:00 PM",
             icon = Icons.Outlined.Alarm
         )
-        Spacer(modifier = Modifier.height(spacing().medium))
+        Spacer(modifier = Modifier.height(spacing.medium))
         LabelWithIcon(
             heading = "Priority",
             content = "Default",
             icon = Icons.Outlined.LowPriority
         )
-        Spacer(modifier = Modifier.height(spacing().medium))
+        Spacer(modifier = Modifier.height(spacing.medium))
         LabelWithIcon(
             heading = "Frequency",
             content = "Once",
             icon = Icons.Outlined.RepeatOne
         )
-        HorizontalDivider(modifier = Modifier.padding(vertical = spacing().lSmall))
+        HorizontalDivider(modifier = Modifier.padding(vertical = spacing.lSmall))
         LabelWithIcon(
             heading = "Notes",
             content = "Add note...",
             icon = Icons.Outlined.EditNote
         )
         HorizontalDivider(
-            modifier = Modifier.padding(vertical = spacing().lSmall),
+            modifier = Modifier.padding(vertical = spacing.lSmall),
             color = Color.LightGray
         )
         LabelWithIcon(
@@ -116,7 +116,7 @@ fun TaskDetails(
             content = "Add item...",
             icon = Icons.Outlined.Checklist
         )
-        Spacer(modifier = Modifier.height(spacing().medium))
+        Spacer(modifier = Modifier.height(spacing.medium))
         ConfirmCancelButton(
             confirmLabel = "Edit",
             onConfirm = {},
@@ -129,7 +129,7 @@ fun TaskDetails(
 @Composable
 fun TaskStatusArea() {
     Row(
-        modifier = Modifier.padding(spacing().small)
+        modifier = Modifier.padding(spacing.small)
     ) {
         TaskStatusItem(
             modifier = Modifier.weight(1f),
@@ -180,7 +180,7 @@ fun TaskStatusItem(
                 tint = color
             )
         }
-        Spacer(modifier = Modifier.height(spacing().xSmall))
+        Spacer(modifier = Modifier.height(spacing.xSmall))
         Box(
             Modifier
                 .background(
@@ -188,11 +188,11 @@ fun TaskStatusItem(
                     shape = RoundedCornerShape(8.dp)
                 )
                 .padding(
-                    horizontal = spacing().lSmall,
-                    vertical = spacing().xSmall,
+                    horizontal = spacing.lSmall,
+                    vertical = spacing.xSmall,
                 ),
         ) {
-            Text(text = status.name.titleCase(), fontSize = textSize().lSmall)
+            Text(text = status.name.titleCase(), fontSize = textSize.lSmall)
         }
     }
 }
@@ -206,8 +206,8 @@ fun LabelWithIcon(
 ) {
     Row(
         modifier = modifier.padding(
-            start = spacing().medium,
-            end = spacing().medium,
+            start = spacing.medium,
+            end = spacing.medium,
         ),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -216,13 +216,13 @@ fun LabelWithIcon(
             contentDescription = "mark task as done",
             tint = Color.Gray
         )
-        Spacer(modifier = Modifier.width(spacing().medium))
+        Spacer(modifier = Modifier.width(spacing.medium))
         Column(
             modifier = Modifier.weight(1f)
         ) {
             if (heading != null) Text(
                 text = heading,
-                fontSize = textSize().lSmall
+                fontSize = textSize.lSmall
             )
             Text(text = content)
         }

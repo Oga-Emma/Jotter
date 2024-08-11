@@ -11,6 +11,8 @@ data class TextSize (
     val default: TextUnit = 0.sp,
     val xSmall: TextUnit = 4.sp,
     val small: TextUnit = 8.sp,
+    val _10: TextUnit = 10.sp,
+    val _11: TextUnit = 11.sp,
     val lSmall: TextUnit = 12.sp,
     val xMedium: TextUnit = 14.sp,
     val medium: TextUnit = 16.sp,

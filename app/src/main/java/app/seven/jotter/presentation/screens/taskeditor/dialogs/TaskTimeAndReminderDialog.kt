@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors.dialogs
+package app.seven.jotter.presentation.screens.taskeditor.dialogs
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -65,7 +65,7 @@ fun TaskTimeAndReminderDialog(
 
             if (reminders.isEmpty()) {
                 EmptyState(
-                    modifier = Modifier.padding(spacing().medium),
+                    modifier = Modifier.padding(spacing.medium),
                     icon = Icons.Default.AlarmOff,
                     label = "No reminders for this event",
                 )
@@ -96,7 +96,7 @@ fun TaskTimeAndReminderDialog(
                     }
                 }) {
                 Icon(Icons.Rounded.AddCircleOutline, "")
-                Spacer(modifier = Modifier.size(spacing().small))
+                Spacer(modifier = Modifier.size(spacing.small))
                 Text(text = "NEW REMINDER")
             }
         }
@@ -123,7 +123,7 @@ fun EditReminderDialog(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(spacing().lSmall)
+                    .padding(spacing.lSmall)
                     .clickable {
                         onEditTime(reminder.value)
                     },
@@ -131,7 +131,7 @@ fun EditReminderDialog(
             ) {
                 Text(
                     text = reminder.value.time.formatTime(),
-                    fontSize = textSize().lMedium,
+                    fontSize = textSize.lMedium,
                     fontWeight = FontWeight.Bold
                 )
                 Text(text = "Reminder time")
@@ -155,18 +155,18 @@ fun ReminderTypeArea(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(spacing().lSmall),
+            .padding(spacing.lSmall),
     ) {
         Text(text = "Reminder type")
-        Spacer(modifier = Modifier.height(spacing().small))
+        Spacer(modifier = Modifier.height(spacing.small))
         Row {
             ReminderTypeButton(
                 modifier = Modifier
                     .weight(1f)
                     .clip(
                         shape = RoundedCornerShape(
-                            topStart = spacing().small,
-                            bottomStart = spacing().small
+                            topStart = spacing.small,
+                            bottomStart = spacing.small
                         )
                     )
                     .clickable {
@@ -191,8 +191,8 @@ fun ReminderTypeArea(
                     .weight(1f)
                     .clip(
                         shape = RoundedCornerShape(
-                            topEnd = spacing().small,
-                            bottomEnd = spacing().small
+                            topEnd = spacing.small,
+                            bottomEnd = spacing.small
                         )
                     )
                     .clickable {
@@ -218,12 +218,12 @@ fun ReminderTypeButton(
     Column(
         modifier = modifier
             .background(color.copy(alpha = .2f))
-            .padding(spacing().xSmall),
+            .padding(spacing.xSmall),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(imageVector = icon, contentDescription = label, tint = color)
-        Spacer(modifier = Modifier.height(spacing().xSmall))
-        Text(text = label, fontSize = textSize().lSmall, color = color)
+        Spacer(modifier = Modifier.height(spacing.xSmall))
+        Text(text = label, fontSize = textSize.lSmall, color = color)
     }
 }
 
@@ -235,7 +235,7 @@ fun ReminderItem(
 ) {
     Column {
         Row(
-            modifier = Modifier.padding(spacing().small)
+            modifier = Modifier.padding(spacing.small)
         ) {
             CircularIcon(
                 modifier = Modifier.clickable {
@@ -248,7 +248,7 @@ fun ReminderItem(
                 },
                 contentDescription = "Notification Icon"
             )
-            Spacer(modifier = Modifier.width(spacing().small))
+            Spacer(modifier = Modifier.width(spacing.small))
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -259,11 +259,11 @@ fun ReminderItem(
             ) {
                 Text(
                     text = taskReminder.time.formatTime(),
-                    fontSize = textSize().medium
+                    fontSize = textSize.medium
                 )
-                Text(text = "Reminder time", fontSize = textSize().xMedium)
+                Text(text = "Reminder time", fontSize = textSize.xMedium)
             }
-            Spacer(modifier = Modifier.width(spacing().small))
+            Spacer(modifier = Modifier.width(spacing.small))
             CircularIcon(
                 modifier = Modifier.clickable {
                     onDelete(taskReminder)

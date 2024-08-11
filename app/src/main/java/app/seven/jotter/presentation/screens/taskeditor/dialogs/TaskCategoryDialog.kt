@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors.dialogs
+package app.seven.jotter.presentation.screens.taskeditor.dialogs
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,7 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import app.seven.jotter.presentation.components.ActionEditorDialog
-import app.seven.jotter.presentation.screens.taskeditors.component.IconHelper
+import app.seven.jotter.presentation.screens.taskeditor.component.IconHelper
 import app.seven.jotter.presentation.theme.spacing
 import app.seven.jotter.common.extensions.titleCase
 import app.seven.jotter.core.models.TaskCategory
@@ -46,7 +46,7 @@ fun TaskCategoryDialog(
                 val category = categories[index]
 
                 Card(
-                    modifier = Modifier.padding(spacing().xSmall),
+                    modifier = Modifier.padding(spacing.xSmall),
                     onClick = { selectedCategory.value = category },
                     colors = CardDefaults.cardColors(
                         containerColor = Color.White
@@ -61,10 +61,10 @@ fun TaskCategoryDialog(
                 ) {
                     Column(
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize().padding(spacing().small),
+                        modifier = Modifier.fillMaxSize().padding(spacing.small),
                     ) {
                         IconHelper.GetCategoryIcon(category)
-                        Spacer(modifier = Modifier.padding(spacing().xSmall))
+                        Spacer(modifier = Modifier.padding(spacing.xSmall))
                         Text(
                             category.name.titleCase(),
                         )

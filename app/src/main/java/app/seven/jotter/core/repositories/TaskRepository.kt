@@ -9,21 +9,20 @@ import javax.inject.Inject
 
 class TaskRepository @Inject constructor(
     private val taskDao: TaskDao,
-    private val taskReminderDao: TaskReminderDao
+    private val taskReminderDao: TaskReminderDao,
 ) {
 
     @Transaction
-    suspend fun upsert(entity: TaskEntity, reminders: List<TaskReminderEntity>) {
+    fun upsert(entity: TaskEntity, reminders: List<TaskReminderEntity>) {
         saveTask(entity)
         saveReminders(reminders)
     }
 
-    private suspend fun saveReminders(reminders: List<TaskReminderEntity>) {
-        if(reminders.isEmpty()) return
+    private fun saveReminders(reminders: List<TaskReminderEntity>) {
         taskReminderDao.insert(*reminders.toTypedArray())
     }
 
-    private suspend fun saveTask(entity: TaskEntity) {
+    private fun saveTask(entity: TaskEntity) {
         taskDao.insert(entity)
     }
 

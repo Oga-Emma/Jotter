@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors
+package app.seven.jotter.presentation.screens.taskeditor
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

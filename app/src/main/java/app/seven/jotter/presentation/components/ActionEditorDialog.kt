@@ -36,14 +36,14 @@ fun ActionEditorDialog(
             Text(
                 text = title,
                 fontWeight = FontWeight.Medium,
-                fontSize = textSize().medium,
+                fontSize = textSize.medium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(spacing().medium)
+                    .padding(spacing.medium)
             )
             HorizontalDivider(thickness = .3.dp)
-            Spacer(modifier = Modifier.size(spacing().xSmall))
+            Spacer(modifier = Modifier.size(spacing.xSmall))
             content()
             ConfirmCancelButton(
                 confirmLabel = confirmLabel,

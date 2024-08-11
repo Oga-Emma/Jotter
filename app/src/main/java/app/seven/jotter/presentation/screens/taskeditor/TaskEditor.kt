@@ -1,4 +1,4 @@
-package app.seven.jotter.presentation.screens.taskeditors
+package app.seven.jotter.presentation.screens.taskeditor
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,7 +48,7 @@ import app.seven.jotter.presentation.components.CircularAvatar
 import app.seven.jotter.presentation.components.CircularIcon
 import app.seven.jotter.presentation.components.ConfirmCancelButton
 import app.seven.jotter.presentation.components.CustomDivider
-import app.seven.jotter.presentation.screens.taskeditors.component.IconHelper
+import app.seven.jotter.presentation.screens.taskeditor.component.IconHelper
 import app.seven.jotter.presentation.theme.pallet
 import app.seven.jotter.presentation.theme.spacing
 import app.seven.jotter.common.extensions.formatDate
@@ -78,7 +78,7 @@ fun TaskEditor(
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = spacing().medium),
+                .padding(horizontal = spacing.medium),
             value = description,
             onValueChange = { description = it },
             label = { Text("Task") },
@@ -92,7 +92,7 @@ fun TaskEditor(
         if (!isValid) {
             Text(
                 modifier = Modifier
-                    .padding(horizontal = spacing().medium),
+                    .padding(horizontal = spacing.medium),
                 text = "Please enter a task", color = Color.Red)
         }
 
@@ -109,7 +109,7 @@ fun TaskEditor(
                 icon = Icons.Default.Category,
                 leading = {
                     Text(taskModel.category.name.titleCase())
-                    Spacer(modifier = Modifier.width(spacing().small))
+                    Spacer(modifier = Modifier.width(spacing.small))
                     IconHelper.GetCategoryIcon(taskModel.category)
                 },
                 onClick = {
@@ -131,7 +131,7 @@ fun TaskEditor(
                 icon = Icons.Rounded.NotificationAdd,
                 leading = {
                     CircularAvatar{
-                        Text("${taskModel.reminders.size}", color = pallet().primary)
+                        Text("${taskModel.reminders.size}", color = pallet.primary)
                     }
                 },
                 onClick = {
@@ -142,7 +142,7 @@ fun TaskEditor(
 //                title = "Priority",
 //                icon = Icons.Rounded.LowPriority,
 //                leading = {
-//                    Text(taskModel.priority.name.titleCase(), color = pallet().primary)
+//                    Text(taskModel.priority.name.titleCase(), color = pallet.primary)
 //                },
 //                onClick = {
 //                    onAction(TaskEditorUIActions.SelectPriority)
@@ -168,7 +168,7 @@ fun TaskEditor(
                 icon = Icons.Rounded.Checklist,
                 leading = {
                     CircularAvatar {
-                        Text(taskModel.checkList.count().toString(), color = pallet().primary)
+                        Text(taskModel.checkList.count().toString(), color = pallet.primary)
                     }
                 },
                 onClick = {
@@ -179,7 +179,7 @@ fun TaskEditor(
         }
         Spacer(
             modifier = Modifier
-                .padding(vertical = spacing().small)
+                .padding(vertical = spacing.small)
         )
         ConfirmCancelButton(onConfirm = {
             if(description.isBlank()){
@@ -215,24 +215,24 @@ fun TaskEditorOption(
         HorizontalDivider(
             thickness = .3.dp
         )
-        Spacer(modifier = Modifier.padding(vertical = spacing().lSmall))
+        Spacer(modifier = Modifier.padding(vertical = spacing.lSmall))
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(horizontal = spacing().medium)
+            modifier = Modifier.padding(horizontal = spacing.medium)
         ) {
-            Icon(icon, contentDescription = title, tint = pallet().primary)
-            Spacer(modifier = Modifier.padding(horizontal = spacing().small))
+            Icon(icon, contentDescription = title, tint = pallet.primary)
+            Spacer(modifier = Modifier.padding(horizontal = spacing.small))
             Text(title, modifier = Modifier.weight(1f))
-            Spacer(modifier = Modifier.padding(horizontal = spacing().small))
+            Spacer(modifier = Modifier.padding(horizontal = spacing.small))
             leading()
             Icon(
                 Icons.Default.ChevronRight,
                 "",
-                modifier = Modifier.size(spacing().lMedium),
-                tint = pallet().primary
+                modifier = Modifier.size(spacing.lMedium),
+                tint = pallet.primary
             )
         }
-        Spacer(modifier = Modifier.size(spacing().lMedium))
+        Spacer(modifier = Modifier.size(spacing.lMedium))
     }
 }
 
